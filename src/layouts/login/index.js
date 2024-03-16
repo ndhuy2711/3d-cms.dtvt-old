@@ -31,6 +31,7 @@ const LoginPage = () => {
         setErrors(errors);
         setEmail("");
         setPassword("");
+        setLoading(false);
       });
   };
 
