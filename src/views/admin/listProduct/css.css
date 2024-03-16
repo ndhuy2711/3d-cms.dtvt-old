@@ -1,0 +1,23 @@
+.btnView:hover{
+    color: inherit;
+    text-decoration: none;
+}
+.custom-search-bar {
+    text-align: right;
+}
+.custom-search-bar .form-control {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: initial;
+    border-bottom-style: groove ;
+    width: 20%;
+    display: inline;
+  }
+.btnSearch {
+    display: inline-block;
+    cursor: pointer;
+}
+.btnSearch:hover {
+    scale: 1.5;
+}
