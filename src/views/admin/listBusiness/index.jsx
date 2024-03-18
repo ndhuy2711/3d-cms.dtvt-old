@@ -336,6 +336,7 @@ const ListBusiness = () => {
               <th className="headerCell">Name of business</th>
               <th className="headerCell">Client ID number</th>
               <th className="headerCell">Person in charge</th>
+              <th className="headerCell">Preset</th>
               <th className="headerCell">Action</th>
             </tr>
           </thead>
@@ -441,6 +442,21 @@ const ListBusiness = () => {
                           {item?.attributes?.Manager}
                         </div>
                       </div>
+                    </td>
+                    <td style={{ verticalAlign: "middle" }}>
+                      <p
+                        className="linkShow"
+                        onClick={() => {
+                          handleModaPresetsShow();
+                          setIdBusiness(
+                            item?.attributes?.businessId + "&id=" + item?.id
+                          );
+                        }}
+                      >
+                        <Badge bg="secondary">
+                          {item?.attributes?.presets?.data?.length}
+                        </Badge>
+                      </p>
                     </td>
                     <td
                       style={{
