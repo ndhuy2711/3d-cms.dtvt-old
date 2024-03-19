@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import { Box, Icon } from "@chakra-ui/react";
+import { Box, Icon, Skeleton, Stack  } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { http, urlStrapi } from "../../../axios/init";
 import Card from "react-bootstrap/Card";
@@ -368,12 +368,13 @@ const DetailProduct = () => {
   };
 
   useEffect(() => {
-    if (!hasNavigated) {
-      // Chỉ chạy scrollTo(0, 0) khi chuyển trang lần đầu
-      window.scrollTo(0, 0);
-      // Đánh dấu là đã chuyển trang lần đầu
-      setHasNavigated(true);
-    }
+    window.scrollTo(0, 0);
+    // if (!hasNavigated) {
+    //   // Chỉ chạy scrollTo(0, 0) khi chuyển trang lần đầu
+    //   window.scrollTo(0, 0);
+    //   // Đánh dấu là đã chuyển trang lần đầu
+    //   setHasNavigated(true);
+    // }
     const searchParams = new URLSearchParams(location.search);
 
     http
@@ -397,11 +398,8 @@ const DetailProduct = () => {
       )
 
       .then((response) => {
-        
         const objectData = response.data.data;
-
         const objectsData = [...objectData];
-
         const dataDetailProduct = objectsData[0];
         getAssetsID(dataDetailProduct);
         setData([dataDetailProduct]);
@@ -691,7 +689,15 @@ const DetailProduct = () => {
         )}
 
         <Box pt={{ base: "180px", md: "80px", xl: "80px" }}>
-          {data.map((item, index) => (
+          {data.length === 0 ? (
+            <Stack>
+              <Skeleton height="20px" />
+              <Skeleton height="20px" />
+              <Skeleton height="20px" />
+              <Skeleton height="20px" />
+              <Skeleton height="20px" />
+            </Stack>
+          ) : data.map((item, index) => (
             <Card
               key={index}
               style={{ margin: "30px 10px", borderRadius: "16px" }}

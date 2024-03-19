@@ -3,7 +3,6 @@ import {
   Box,
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   Flex,
   Text,
   useColorModeValue,
@@ -18,13 +17,6 @@ export default function AdminNavbar(props) {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [nameBusiness, setNameBusiness] = useState("");
-
-  // useEffect(() => {
-  // 	window.addEventListener('scroll', changeNavbar);
-  // 	return () => {
-  // 		window.removeEventListener('scroll', changeNavbar);
-  // 	};
-  // });
 
   const { secondary, message, brandText } = props;
 
@@ -126,13 +118,6 @@ export default function AdminNavbar(props) {
       }}
       pt="8px"
       top={{ base: "12px", md: "16px", lg: "20px", xl: "20px" }}
-      // w={{
-      //   base: "calc(100vw - 6%)",
-      //   md: "calc(100vw - 8%)",
-      //   lg: "calc(100vw - 6%)",
-      //   xl: "calc(100vw - 276px)",
-      //   "2xl": "calc(100vw - 276px)",
-      // }}
       w="calc(100vw - 11vw - 60px)"
     >
       <Flex

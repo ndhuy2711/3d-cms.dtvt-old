@@ -29,7 +29,6 @@ const LoginPage = () => {
         const errors = {};
         errors.author = "Email or password is invalid";
         setErrors(errors);
-        setEmail("");
         setPassword("");
         setLoading(false);
       });
@@ -40,10 +39,7 @@ const LoginPage = () => {
 
     if (!email) {
       errors.email = "This value is required.";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "This is an invalid email";
     }
-
     if (!password) {
       errors.password = "This value is required.";
     }
@@ -102,10 +98,10 @@ const LoginPage = () => {
             {errors.author}
           </Form.Control.Feedback>
           <Form.Group controlId="formBasicEmail" style={{ margin: "10px 0" }}>
-            <Form.Label>Email</Form.Label>
+            <Form.Label>Username</Form.Label>
             <Form.Control
-              type="email"
-              placeholder="Enter your email"
+              type="text"
+              placeholder="Enter your username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

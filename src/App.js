@@ -6,19 +6,7 @@ import { useContext } from "react";
 import { AppContext } from "./Context";
 
 function App() {
-  // function GetToken () {
-  //   const getValueJWT = useSelector((state) => state.auth.value);
-  //   // const dispatch = useDispatch()
-  //   if (getValueJWT === "") {
-  //     return false;
-  //   } else {
-  //     // const getJWTToken = localStorage.getItem('dtvt');
-  //     // dispatch(checkAuth(getJWTToken))
-  //     return true;
-  //   }
-  // };
   const { isLogin } = useContext(AppContext);
-  console.log("isLogin", isLogin)
   return (
     <>
       {isLogin ? (

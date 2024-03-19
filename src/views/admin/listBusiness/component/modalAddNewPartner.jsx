@@ -201,7 +201,7 @@ const ModalAddNewPartner = ({
                 justifyContent: "space-between",
               }}
             >
-              <Form.Label>Partner Id</Form.Label>
+              <Form.Label>Partner id</Form.Label>
               <Form.Control
                 style={{ width: "513px" }}
                 type="text"

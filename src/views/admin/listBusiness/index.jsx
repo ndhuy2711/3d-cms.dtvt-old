@@ -4,7 +4,8 @@ import {
   Button,
   FormControl,
   Alert,
-  Spinner,
+  Form,
+  Badge,
 } from "react-bootstrap";
 import jwt_decode from "jwt-decode";
 import { Box } from "@chakra-ui/react";
@@ -13,9 +14,8 @@ import { useEffect, useState } from "react";
 import { http, urlStrapi } from "../../../axios/init";
 import "./styles.css";
 import { CgAddR, CgCodeSlash } from "react-icons/cg";
-import { Form, Badge } from "react-bootstrap";
 import { FaRegCopy } from "react-icons/fa";
-import { BsSearch, BsFillCheckCircleFill } from "react-icons/bs";
+import { BsFillCheckCircleFill } from "react-icons/bs";
 import { TiDeleteOutline } from "react-icons/ti";
 import ModalAddNewPartner from "./component/modalAddNewPartner";
 import ModalAddPeople from "./component/modalAddPeople";
@@ -27,6 +27,7 @@ import {
 import ModalPresets from "./component/modalPresets";
 import ModalProjectName from "./component/modalProjectName";
 import ModalAddProjectName from "./component/modalAddProjectName";
+import { Skeleton, Stack } from "@chakra-ui/react";
 
 const ListBusiness = () => {
   const getJWTToken = localStorage.getItem("dtvt");
@@ -48,9 +49,6 @@ const ListBusiness = () => {
   const [isButtonAddDisabled, setIsButtonAddDisabled] = useState(false);
   const [isButtonAddPeopleDisabled, setIsButtonAddPeopleDisabled] =
     useState(false);
-  const [_roleManagerAll, setRoleManagerAll] = useState(false);
-  const [_roleManagerBusiness, setRoleManagerBusiness] = useState(false);
-  const [_roleUser, setRoleUser] = useState(false);
   const [idBusiness, setIdBusiness] = useState("");
   const [roleName, setRoleName] = useState("");
   const handleModalAddPartnerClose = () => setShowModalAddPartner(false);
@@ -79,26 +77,15 @@ const ListBusiness = () => {
     setShowModalPresets(false);
   };
   const fillter = () => {
-    // Declare variables
-
     var input, filter, table, tr, td, i, txtValue;
-
     input = document.getElementById("myInput");
-
     filter = input.value.toUpperCase();
-
     table = document.getElementById("myTable");
-
     tr = table.getElementsByTagName("tr");
-
-    // Loop through all table rows, and hide those who don't match the search query
-
     for (i = 0; i < tr.length; i++) {
       td = tr[i].getElementsByTagName("td")[0];
-
       if (td) {
         txtValue = td.textContent || td.innerText;
-
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
           tr[i].style.display = "";
         } else {
@@ -108,8 +95,42 @@ const ListBusiness = () => {
     }
   };
 
+  const fetchAPIRoleManagerAll = () => {
+    http
+      .get(
+        `businesses?populate[presets][populate]=*&populate[avatar][populate]=*&populate[azure_credential][populate]=*`,
+        {
+          headers: {
+            Authorization: `Bearer ${getJWTToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        const objectData = response.data.data;
+        const objectsData = [...objectData];
+        setData(objectsData);
+      })
+      .catch((err) => err);
+  };
+  const fetchAPIRoleManagerBusiness = (businessID) => {
+    http
+      .get(
+        `businesses?populate[presets][populate]=*&populate[avatar][populate]=*&populate[azure_credential][populate]=*&filters[businessId][$eq]=${businessID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${getJWTToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        const objectData = response.data.data;
+        const objectsData = [...objectData];
+        setData(objectsData);
+      })
+      .catch((err) => err);
+  };
+
   useEffect(() => {
-    window.scrollTo(0, 0);
     http
       .get(`users?populate=*&filters[id][$eq]=${idUser}`, {
         headers: {
@@ -119,70 +140,33 @@ const ListBusiness = () => {
       .then((result) => {
         const role = result.data[0].role.name;
         const businessID = result.data[0].businessId;
+        console.log("role", role);
         const checkRoleManagerAll = roleManagerAll.find(
           (item) => item.role === role
         );
         const checkRoleManagerBusiness = roleManagerBusiness.find(
           (item) => item.role === role
         );
-
         const checkRoleUser = roleUser.find((item) => item.role === role);
-
         switch (role) {
           case checkRoleManagerAll?.role:
-            setRoleManagerAll(true);
+            fetchAPIRoleManagerAll();
             setRoleName("roleManagerAll");
             break;
           case checkRoleManagerBusiness?.role:
-            setRoleManagerBusiness(true);
+            fetchAPIRoleManagerBusiness(businessID);
             setRoleName("roleManagerBusiness");
             break;
           case checkRoleUser?.role:
-            setRoleUser(true);
+            fetchAPIRoleManagerBusiness(businessID);
             setRoleName("checkRoleUser");
             break;
           default:
             break;
         }
-        if (_roleManagerAll) {
-          http
-            .get(
-              `businesses?populate[presets][populate]=*&populate[avatar][populate]=*&populate[azure_credential][populate]=*`,
-              {
-                headers: {
-                  Authorization: `Bearer ${getJWTToken}`,
-                },
-              }
-            )
-            .then((response) => {
-              const objectData = response.data.data;
-              const objectsData = [...objectData];
-              setData(objectsData);
-            })
-            .catch((err) => err);
-        } else if (!_roleManagerAll) {
-          http
-            .get(
-              `businesses?populate[presets][populate]=*&populate[avatar][populate]=*&populate[azure_credential][populate]=*&filters[businessId][$eq]=${businessID}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${getJWTToken}`,
-                },
-              }
-            )
-            .then((response) => {
-              const objectData = response.data.data;
-              const objectsData = [...objectData];
-              setData(objectsData);
-            })
-            .catch((err) => err);
-        }
       });
   }, [
     successMessageAddPartner,
-    _roleManagerAll,
-    _roleManagerBusiness,
-    _roleUser,
     showModalPresets === false,
     showModalProjectName === false,
     showModalAddProjectName === false,
@@ -309,8 +293,7 @@ const ListBusiness = () => {
             id="myInput"
             onKeyUp={fillter}
           />
-          {/* <BsSearch className="btnSearch" /> */}
-          {_roleManagerAll === true || _roleManagerBusiness === true ? (
+          {roleName !== "checkRoleUser" ? (
             <Button
               variant="primary"
               style={{ margin: "15px 10px 15px 60px" }}
@@ -341,10 +324,45 @@ const ListBusiness = () => {
             </tr>
           </thead>
           {data.length === 0 ? (
-            <div>
-              <br />
-              <Spinner animation="border" />
-            </div>
+            <tbody>
+              <tr>
+                <td>
+                  <Stack>
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                  </Stack>
+                </td>
+                <td>
+                  <Stack>
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                  </Stack>
+                </td>
+                <td>
+                  <Stack>
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                  </Stack>
+                </td>
+                <td>
+                  <Stack>
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                  </Stack>
+                </td>
+                <td>
+                  <Stack>
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                  </Stack>
+                </td>
+              </tr>
+            </tbody>
           ) : (
             <tbody>
               {data.map((item, index) => {
@@ -465,8 +483,7 @@ const ListBusiness = () => {
                         width: "20%",
                       }}
                     >
-                      {_roleManagerAll === true ||
-                      _roleManagerBusiness === true ? (
+                      {roleName !== "checkRoleUser" ? (
                         <p
                           className="linkShow"
                           onClick={() => {
@@ -500,112 +517,122 @@ const ListBusiness = () => {
             </tbody>
           )}
         </Table>
-        <Modal
-          show={showModalSnippet}
-          onHide={handleModalSnippetClose}
-          size="lg"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Install Google Tag Manager</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>
-              Copy the code below and paste it onto every page of your website
-            </p>
-            <p>
-              Paste this code as high in the <b>&lt;head&gt;</b> of the page as
-              possible:
-            </p>
-            <br />
-            <div
-              style={{
-                background: "#e9ecef",
-                border: "1px solid #ced4da",
-                padding: "18px",
-                borderRadius: "2px",
-                position: "relative",
-              }}
-            >
-              <span>{codeIntegrationHead}</span>
 
-              <FaRegCopy
+        {showModalSnippet && (
+          <Modal
+            show={showModalSnippet}
+            onHide={handleModalSnippetClose}
+            size="lg"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Install Google Tag Manager</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>
+                Copy the code below and paste it onto every page of your website
+              </p>
+              <p>
+                Paste this code as high in the <b>&lt;head&gt;</b> of the page
+                as possible:
+              </p>
+              <br />
+              <div
                 style={{
-                  position: "absolute",
-                  top: "16px",
-                  right: "24px",
-                  cursor: "pointer",
-                  fontSize: "24px",
+                  background: "#e9ecef",
+                  border: "1px solid #ced4da",
+                  padding: "18px",
+                  borderRadius: "2px",
+                  position: "relative",
                 }}
-                variant="outline-secondary"
-                id="copy-button"
-                onClick={() => {
-                  copyToClipboard(codeIntegrationHead);
-                }}
-              />
-            </div>
-            <br />
-            <p>
-              Additionally, paste this code immediately after the opening{" "}
-              <b>&lt;body&gt;</b> tag:{" "}
-            </p>
-            <br />
-            <div
-              style={{
-                background: "#e9ecef",
-                border: "1px solid #ced4da",
-                padding: "18px",
-                borderRadius: "2px",
-                position: "relative",
-              }}
-            >
-              <span>{codeIntegrationBody}</span>
+              >
+                <span>{codeIntegrationHead}</span>
 
-              <FaRegCopy
+                <FaRegCopy
+                  style={{
+                    position: "absolute",
+                    top: "16px",
+                    right: "24px",
+                    cursor: "pointer",
+                    fontSize: "24px",
+                  }}
+                  variant="outline-secondary"
+                  id="copy-button"
+                  onClick={() => {
+                    copyToClipboard(codeIntegrationHead);
+                  }}
+                />
+              </div>
+              <br />
+              <p>
+                Additionally, paste this code immediately after the opening{" "}
+                <b>&lt;body&gt;</b> tag:{" "}
+              </p>
+              <br />
+              <div
                 style={{
-                  position: "absolute",
-                  top: "16px",
-                  right: "24px",
-                  cursor: "pointer",
-                  fontSize: "24px",
+                  background: "#e9ecef",
+                  border: "1px solid #ced4da",
+                  padding: "18px",
+                  borderRadius: "2px",
+                  position: "relative",
                 }}
-                variant="outline-secondary"
-                id="copy-button"
-                onClick={() => {
-                  copyToClipboard(codeIntegrationBody);
-                }}
-              />
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleModalSnippetClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
+              >
+                <span>{codeIntegrationBody}</span>
+
+                <FaRegCopy
+                  style={{
+                    position: "absolute",
+                    top: "16px",
+                    right: "24px",
+                    cursor: "pointer",
+                    fontSize: "24px",
+                  }}
+                  variant="outline-secondary"
+                  id="copy-button"
+                  onClick={() => {
+                    copyToClipboard(codeIntegrationBody);
+                  }}
+                />
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleModalSnippetClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
       </Box>
-      <ModalAddNewPartner
-        showModalAddPartner={showModalAddPartner}
-        handleModalAddPartnerClose={handleModalAddPartnerClose}
-        getJWTToken={getJWTToken}
-        setIsButtonAddDisabled={setIsButtonAddDisabled}
-        onSubmitSuccess={handleModalSubmitSuccess}
-      />
-      <ModalAddPeople
-        showModalAddPeople={showModalAddPeople}
-        handleModalAddPeopleClose={handleModalAddPeopleClose}
-        getJWTToken={getJWTToken}
-        setIsButtonAddPeopleDisabled={setIsButtonAddPeopleDisabled}
-        onSubmitSuccess={handleModalAddPeopleSubmitSuccess}
-        idBusiness={idBusiness}
-        roleName={roleName}
-      />
-      <ModalPresets
-        showModalPresets={showModalPresets}
-        setShowModalPresets={setShowModalPresets}
-        handleModalPresetsClose={handleModalPresetsClose}
-        getJWTToken={getJWTToken}
-        idBusiness={idBusiness}
-      />
+      {showModalAddPartner && (
+        <ModalAddNewPartner
+          showModalAddPartner={showModalAddPartner}
+          handleModalAddPartnerClose={handleModalAddPartnerClose}
+          getJWTToken={getJWTToken}
+          setIsButtonAddDisabled={setIsButtonAddDisabled}
+          onSubmitSuccess={handleModalSubmitSuccess}
+        />
+      )}
+      {showModalAddPeople && (
+        <ModalAddPeople
+          showModalAddPeople={showModalAddPeople}
+          handleModalAddPeopleClose={handleModalAddPeopleClose}
+          getJWTToken={getJWTToken}
+          setIsButtonAddPeopleDisabled={setIsButtonAddPeopleDisabled}
+          onSubmitSuccess={handleModalAddPeopleSubmitSuccess}
+          idBusiness={idBusiness}
+          roleName={roleName}
+        />
+      )}
+
+      {showModalPresets && (
+        <ModalPresets
+          showModalPresets={showModalPresets}
+          setShowModalPresets={setShowModalPresets}
+          handleModalPresetsClose={handleModalPresetsClose}
+          getJWTToken={getJWTToken}
+          idBusiness={idBusiness}
+        />
+      )}
       {showModalProjectName && (
         <ModalProjectName
           showModalProjectName={showModalProjectName}

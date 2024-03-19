@@ -124,57 +124,73 @@ const ModalPresets = ({
             </thead>
             {loadedPresets ? (
               <tbody>
-                {listPresets.map((data, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{data?.attributes?.preset}</td>
-                      <td>
-                        <p
-                          className="linkShow"
-                          onClick={() => {
-                            setShowModalAssetsList(true);
-                            setShowModalPresets(false);
-                            getAPreset(data?.id);
-                          }}
-                        >
-                          <Badge bg="secondary" style={{ padding: "5px 8px" }}>
-                            {data?.attributes?.assets?.data?.length}
-                          </Badge>
-                        </p>
-                      </td>
-                      <td>
-                        <Button
-                          variant="success"
-                          style={{ margin: "5px" }}
-                          onClick={() => {
-                            setShowModalEditPreset(true);
-                            setShowModalPresets(false);
-                            setAPresets(
-                              data?.id + "&" + data?.attributes?.preset
-                            );
-                          }}
-                        >
-                          <CiEdit style={{ display: "inline-block" }} />
-                        </Button>
-                        <Button
-                          variant="danger"
-                          onClick={() => {
-                            setShowModalDeletePreset(true);
-                            setShowModalPresets(false);
-                            setAPresets(
-                              data?.id + "&" + data?.attributes?.preset
-                            );
-                          }}
-                        >
-                          <MdDeleteForever
-                            style={{ display: "inline-block" }}
-                          />
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {listPresets.length === 0 ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {" "}
+                    null{" "}
+                  </div>
+                ) : (
+                  listPresets.map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{data?.attributes?.preset}</td>
+                        <td>
+                          <p
+                            className="linkShow"
+                            onClick={() => {
+                              setShowModalAssetsList(true);
+                              setShowModalPresets(false);
+                              getAPreset(data?.id);
+                            }}
+                          >
+                            <Badge
+                              bg="secondary"
+                              style={{ padding: "5px 8px" }}
+                            >
+                              {data?.attributes?.assets?.data?.length}
+                            </Badge>
+                          </p>
+                        </td>
+                        <td>
+                          <Button
+                            variant="success"
+                            style={{ margin: "5px" }}
+                            onClick={() => {
+                              setShowModalEditPreset(true);
+                              setShowModalPresets(false);
+                              setAPresets(
+                                data?.id + "&" + data?.attributes?.preset
+                              );
+                            }}
+                          >
+                            <CiEdit style={{ display: "inline-block" }} />
+                          </Button>
+                          <Button
+                            variant="danger"
+                            onClick={() => {
+                              setShowModalDeletePreset(true);
+                              setShowModalPresets(false);
+                              setAPresets(
+                                data?.id + "&" + data?.attributes?.preset
+                              );
+                            }}
+                          >
+                            <MdDeleteForever
+                              style={{ display: "inline-block" }}
+                            />
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             ) : (
               <div style={{ margin: "10px 30px" }}>
