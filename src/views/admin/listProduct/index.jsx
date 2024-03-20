@@ -18,7 +18,7 @@ import { TiDeleteOutline } from "react-icons/ti";
 import CreateProduct from "../createProduct";
 import { ImBin } from "react-icons/im";
 import DeleteProduct from "./component/deleteProduct";
-import { Skeleton, Stack } from "@chakra-ui/react";
+import { Skeleton, SkeletonText } from "@chakra-ui/react";
 
 const ListProduct = () => {
   const fillter = () => {
@@ -39,7 +39,7 @@ const ListProduct = () => {
     }
   };
   const location = useLocation();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [businessId, setBusinessId] = useState("");
   const [isButtonAddDisabled, setIsButtonAddDisabled] = useState(false);
   const [isButtonDeleteDisabled, setIsButtonDeleteDisabled] = useState(false);
@@ -53,6 +53,7 @@ const ListProduct = () => {
   const [successMessageDelete, setSuccessMessageDelete] = useState("");
   const [dataDelete, setDataDelete] = useState([]);
   const [tokenSket, setTokenSket] = useState("");
+  const [skeleton, setSkeleton] = useState(false);
   const [showModalDeleteProduct, setShowModalDeleteProduct] = useState(false);
   const handleModalDeleteProductClose = () => setShowModalDeleteProduct(false);
   const handleModalDeleteProductShow = (data) => {
@@ -88,6 +89,7 @@ const ListProduct = () => {
 
           const objectsData = [...objectData];
           setData(objectsData);
+          setSkeleton(false);
         })
         .catch((err) => err);
     },
@@ -97,6 +99,7 @@ const ListProduct = () => {
     window.scrollTo(0, 0);
     if (getIDBusiness !== null) {
       setBusinessId(getIDBusiness);
+      setSkeleton(true);
       fetchAPI(getIDBusiness);
     }
   }, [successMessage, successMessageDelete]);
@@ -185,163 +188,213 @@ const ListProduct = () => {
         </Form>
 
         <ul id="myUL" style={{ listStyleType: "none" }}>
-          {data.length === 0 ? (
-            <Stack>
-              <Skeleton height="28px" />
-              <Skeleton height="28px" />
-              <Skeleton height="28px" />
-            </Stack>
-          ) : (
-            data.map((item, index) => (
-              <li>
-                <Card
-                  id="item"
-                  key={index}
-                  style={{
-                    margin: "30px 10px",
-                    borderRadius: "16px",
-                    clear: "both",
-                  }}
-                >
-                  <Card.Body>
-                    <Row>
-                      <Col xs={4} style={{ padding: "30px 0" }}>
-                        <div className="d-flex justify-content-center align-items-center">
-                          <Card.Img
-                            loading="lazy"
-                            variant="left"
-                            src={
-                              urlStrapi +
-                              "/" +
-                              item?.attributes?.testImage?.data?.attributes?.url
-                            }
+          {skeleton && !data && (
+            <div>
+              <Card.Body
+                style={{
+                  margin: "30px 10px",
+                  borderRadius: "16px",
+                  clear: "both",
+                }}
+              >
+                <Card.Body>
+                  <Row>
+                    <Col xs={4} style={{ padding: "30px 0" }}>
+                      <div className="d-flex justify-content-center align-items-center">
+                        <div>
+                          <Skeleton
                             style={{
                               width: "360px",
-                              maxHeight: "360px",
-                              objectFit: "contain",
+                              minHeight: "360px",
                             }}
                           />
                         </div>
-                      </Col>
+                      </div>
+                    </Col>
 
-                      <Col xs={8} style={{ padding: "30px 32px 30px 70px" }}>
-                        <Card.Title
-                          style={{
-                            marginBottom: "10px",
-                            fontSize: "40px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          <a>{item?.attributes?.title}</a>
-                        </Card.Title>
+                    <Col xs={8} style={{ padding: "30px 32px 30px 70px" }}>
+                      <SkeletonText
+                        mt="4"
+                        noOfLines={4}
+                        spacing="4"
+                        skeletonHeight="2"
+                      />
+                      <SkeletonText
+                        mt="4"
+                        noOfLines={4}
+                        spacing="4"
+                        skeletonHeight="2"
+                      />
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card.Body>
+            </div>
+          )}
+          {data &&
+            (data?.length === 0 ? (
+              <div
+                style={{
+                  color: "#a0aec0",
+                }}
+              >
+                Product is empty !
+              </div>
+            ) : (
+              data.map((item, index) => (
+                <li>
+                  <Card
+                    id="item"
+                    key={index}
+                    style={{
+                      margin: "30px 10px",
+                      borderRadius: "16px",
+                      clear: "both",
+                    }}
+                  >
+                    <Card.Body>
+                      <Row>
+                        <Col xs={4} style={{ padding: "30px 0" }}>
+                          <div className="d-flex justify-content-center align-items-center">
+                            <Card.Img
+                              loading="lazy"
+                              variant="left"
+                              src={
+                                urlStrapi +
+                                "/" +
+                                item?.attributes?.testImage?.data?.attributes
+                                  ?.url
+                              }
+                              style={{
+                                width: "360px",
+                                maxHeight: "360px",
+                                objectFit: "contain",
+                              }}
+                            />
+                          </div>
+                        </Col>
 
-                        <Card.Text
-                          style={{
-                            margin: "16px 0px 8px 0px",
-                            color: "#6C757D",
-                          }}
-                        >
-                          Product ID: {item?.attributes?.productId}
-                        </Card.Text>
+                        <Col xs={8} style={{ padding: "30px 32px 30px 70px" }}>
+                          <Card.Title
+                            style={{
+                              marginBottom: "10px",
+                              fontSize: "40px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            <a>{item?.attributes?.title}</a>
+                          </Card.Title>
 
-                        <Card.Text
-                          style={{ marginBottom: "8px", color: "#6C757D" }}
-                        >
-                          Models Quantity:{" "}
-                          {item?.attributes?.assets?.data?.length}
-                        </Card.Text>
-
-                        {item?.attributes?.category?.data && (
                           <Card.Text
                             style={{
                               margin: "16px 0px 8px 0px",
                               color: "#6C757D",
                             }}
                           >
-                            Category:{" "}
-                            {item?.attributes?.category?.data?.attributes?.name}
+                            Product ID: {item?.attributes?.productId}
                           </Card.Text>
-                        )}
 
-                        <Card.Text
-                          style={{
-                            margin: "16px 0px 8px 0px",
-                            color: "#6C757D",
-                          }}
-                        >
-                          Tryout Link:{" "}
-                          {item?.attributes?.tryoutLink !== "" &&
-                          item?.attributes?.tryoutLink ? (
-                            <a
-                              target="_blank"
-                              href={`${item?.attributes?.tryoutLink}`}
+                          <Card.Text
+                            style={{ marginBottom: "8px", color: "#6C757D" }}
+                          >
+                            Models Quantity:{" "}
+                            {item?.attributes?.assets?.data?.length}
+                          </Card.Text>
+
+                          {item?.attributes?.category?.data && (
+                            <Card.Text
+                              style={{
+                                margin: "16px 0px 8px 0px",
+                                color: "#6C757D",
+                              }}
                             >
-                              {item?.attributes?.tryoutLink}
-                            </a>
-                          ) : (
-                            "Not Available"
+                              Category:{" "}
+                              {
+                                item?.attributes?.category?.data?.attributes
+                                  ?.name
+                              }
+                            </Card.Text>
                           )}
-                        </Card.Text>
-                        <Card.Text
-                          style={{
-                            margin: "16px 0px 16px 0px",
-                            color: "#212529",
-                            fontSize: "20px",
-                            textAlign: "left",
-                          }}
-                        >
-                          {item?.attributes?.description}
-                        </Card.Text>
 
-                        <Button variant="primary">
-                          <Link
-                            to={`/admin/list-products/detail-product?id=${businessId}&&productID=${item?.attributes?.productId}`}
-                            className="btnView"
-                          >
-                            {" "}
-                            View Product Detail{" "}
-                          </Link>
-                        </Button>
-
-                        <div
-                          className="position-absolute bottom-0 end-0 text-muted"
-                          style={{ margin: "0px 50px 50px 0 " }}
-                        >
-                          <Icon
-                            as={ImBin}
+                          <Card.Text
                             style={{
-                              padding: "0px 0px 5px",
-                              width: "25px",
-                              height: "25px",
-                              color: "#c59090",
+                              margin: "16px 0px 8px 0px",
+                              color: "#6C757D",
                             }}
-                          />
-
-                          <u
-                            style={{
-                              color: "#c59090",
-                              marginLeft: "8px",
-                              textDecoration: "underline",
-                              fontSize: "18px",
-                              cursor: "pointer",
-                              disabled: "none",
-                            }}
-                            onClick={
-                              !isButtonDeleteDisabled
-                                ? () => handleModalDeleteProductShow(item)
-                                : () => {}
-                            }
                           >
-                            Delete
-                          </u>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Card.Body>
-                </Card>
-              </li>
-            ))
-          )}
+                            Tryout Link:{" "}
+                            {item?.attributes?.tryoutLink !== "" &&
+                            item?.attributes?.tryoutLink ? (
+                              <a
+                                target="_blank"
+                                href={`${item?.attributes?.tryoutLink}`}
+                              >
+                                {item?.attributes?.tryoutLink}
+                              </a>
+                            ) : (
+                              "Not Available"
+                            )}
+                          </Card.Text>
+                          <Card.Text
+                            style={{
+                              margin: "16px 0px 16px 0px",
+                              color: "#212529",
+                              fontSize: "20px",
+                              textAlign: "left",
+                            }}
+                          >
+                            {item?.attributes?.description}
+                          </Card.Text>
+
+                          <Button variant="primary">
+                            <Link
+                              to={`/admin/list-products/detail-product?id=${businessId}&&productID=${item?.attributes?.productId}`}
+                              className="btnView"
+                            >
+                              {" "}
+                              View Product Detail{" "}
+                            </Link>
+                          </Button>
+
+                          <div
+                            className="position-absolute bottom-0 end-0 text-muted"
+                            style={{ margin: "0px 50px 50px 0 " }}
+                          >
+                            <Icon
+                              as={ImBin}
+                              style={{
+                                padding: "0px 0px 5px",
+                                width: "25px",
+                                height: "25px",
+                                color: "#c59090",
+                              }}
+                            />
+
+                            <u
+                              style={{
+                                color: "#c59090",
+                                marginLeft: "8px",
+                                textDecoration: "underline",
+                                fontSize: "18px",
+                                cursor: "pointer",
+                                disabled: "none",
+                              }}
+                              onClick={
+                                !isButtonDeleteDisabled
+                                  ? () => handleModalDeleteProductShow(item)
+                                  : () => {}
+                              }
+                            >
+                              Delete
+                            </u>
+                          </div>
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                </li>
+              ))
+            ))}
         </ul>
         {showModalAddProduct && (
           <CreateProduct

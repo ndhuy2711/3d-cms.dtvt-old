@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import { Box, Icon, Skeleton, Stack  } from "@chakra-ui/react";
+import { Box, Icon, Skeleton, SkeletonText } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { http, urlStrapi } from "../../../axios/init";
 import Card from "react-bootstrap/Card";
@@ -66,7 +66,7 @@ const DetailProduct = () => {
   const [imgQRCode, setImgQRCode] = useState("");
 
   const [qrShow, setQRShow] = useState(false);
-  
+
   const handleModalEditProductClose = () => setShowModalEditProduct(false);
   const handleModalEditProductShow = (data) => {
     setShowModalEditProduct(true);
@@ -386,7 +386,7 @@ const DetailProduct = () => {
       .then((res) => {
         setTokenSket(res.data.data[0].attributes.sketchfabCredentialCode);
       });
-    
+
     http
       .get(
         `products?filters[businessId][$eq]=${businessId}&filters[productId][$eq]=${productId}&populate=*`,
@@ -406,7 +406,7 @@ const DetailProduct = () => {
 
         setModelQuatity(response.data.data[0].attributes.assets.data.length);
         if (objectsData.length !== 0) {
-          const   objectsDataListAssest =
+          const objectsDataListAssest =
             dataDetailProduct.attributes.assets.data;
           setListAsset(objectsDataListAssest);
           objectsDataListAssest.forEach((item, index) => {
@@ -690,149 +690,191 @@ const DetailProduct = () => {
 
         <Box pt={{ base: "180px", md: "80px", xl: "80px" }}>
           {data.length === 0 ? (
-            <Stack>
-              <Skeleton height="20px" />
-              <Skeleton height="20px" />
-              <Skeleton height="20px" />
-              <Skeleton height="20px" />
-              <Skeleton height="20px" />
-            </Stack>
-          ) : data.map((item, index) => (
-            <Card
-              key={index}
-              style={{ margin: "30px 10px", borderRadius: "16px" }}
-            >
-              <Card.Body>
-                <Row>
-                  <Col xs={4} style={{ padding: "30px 0" }}>
-                    <div className="d-flex justify-content-center align-items-center">
-                      <Card.Img
-                        variant="left"
-                        src={
-                          urlStrapi +
-                          "/" +
-                          item?.attributes?.testImage?.data?.attributes?.url
-                        }
-                        style={{
-                          width: "360px",
-                          maxHeight: "360px",
-                          objectFit: "contain",
-                        }}
+            <div>
+              <Card.Body
+                style={{
+                  margin: "30px 10px",
+                  borderRadius: "16px",
+                  clear: "both",
+                }}
+              >
+                <Card.Body>
+                  <Row>
+                    <Col xs={4} style={{ padding: "30px 0" }}>
+                      <div className="d-flex justify-content-center align-items-center">
+                        <div>
+                          <Skeleton
+                            style={{
+                              width: "360px",
+                              minHeight: "360px",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </Col>
+
+                    <Col xs={8} style={{ padding: "30px 32px 30px 70px" }}>
+                      <SkeletonText
+                        mt="4"
+                        noOfLines={4}
+                        spacing="4"
+                        skeletonHeight="2"
                       />
-                    </div>
-                  </Col>
+                      <SkeletonText
+                        mt="4"
+                        noOfLines={4}
+                        spacing="4"
+                        skeletonHeight="2"
+                      />
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card.Body>
+            </div>
+          ) : (
+            data.map((item, index) => (
+              <Card
+                key={index}
+                style={{ margin: "30px 10px", borderRadius: "16px" }}
+              >
+                <Card.Body>
+                  <Row>
+                    <Col xs={4} style={{ padding: "30px 0" }}>
+                      <div className="d-flex justify-content-center align-items-center">
+                        <Card.Img
+                          variant="left"
+                          src={
+                            urlStrapi +
+                            "/" +
+                            item?.attributes?.testImage?.data?.attributes?.url
+                          }
+                          style={{
+                            width: "360px",
+                            maxHeight: "360px",
+                            objectFit: "contain",
+                          }}
+                        />
+                      </div>
+                    </Col>
 
-                  <Col xs={8} style={{ padding: "30px 32px 30px 70px" }}>
-                    <Card.Title
-                      style={{
-                        marginBottom: "10px",
-                        fontSize: "40px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {item?.attributes?.title}
-                    </Card.Title>
+                    <Col xs={8} style={{ padding: "30px 32px 30px 70px" }}>
+                      <Card.Title
+                        style={{
+                          marginBottom: "10px",
+                          fontSize: "40px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {item?.attributes?.title}
+                      </Card.Title>
 
-                    <Card.Text
-                      style={{ margin: "16px 0px 8px 0px", color: "#6C757D" }}
-                    >
-                      Product ID: {item?.attributes?.productId}
-                    </Card.Text>
-
-                    <Card.Text
-                      style={{ marginBottom: "8px", color: "#6C757D" }}
-                    >
-                      Models Quantity: {modelQuantity}
-                    </Card.Text>
-
-                    {item?.attributes?.category?.data && (
                       <Card.Text
                         style={{ margin: "16px 0px 8px 0px", color: "#6C757D" }}
                       >
-                        Category:{" "}
-                        {item?.attributes?.category?.data?.attributes?.name}
+                        Product ID: {item?.attributes?.productId}
                       </Card.Text>
-                    )}
 
-                    <Card.Text
-                      style={{ margin: "16px 0px 8px 0px", color: "#6C757D" }}
-                    >
-                      Tryout Link:{" "}
-                      {item?.attributes?.tryoutLink !== "" &&
-                      item?.attributes?.tryoutLink ? (
-                        <a
-                          target="_blank"
-                          href={`${item?.attributes?.tryoutLink}`}
-                        >
-                          {item?.attributes?.tryoutLink}
-                        </a>
-                      ) : (
-                        "Not Available"
-                      )}
-                    </Card.Text>
-                    <Card.Text
-                      style={{
-                        margin: "16px 0px 16px 0px",
-                        color: "#212529",
-                        fontSize: "20px",
-                        textAlign: "left",
-                      }}
-                    >
-                      {item?.attributes?.description}
-                    </Card.Text>
-
-                    <div key="inline-radio" className="mb-3">
-                      <Form.Check
-                        inline
-                        label="Basic"
-                        value="basic"
-                        name="group1"
-                        type="radio"
-                        id="inline-radio-1"
-                        checked={item?.attributes?.arViewer === "basic"}
-                        disabled={item?.attributes?.arViewer === "advanced"}
-                      />
-                      <Form.Check
-                        inline
-                        label="Advanced"
-                        value="advanced"
-                        name="group1"
-                        type="radio"
-                        id="inline-radio-2"
-                        checked={item?.attributes?.arViewer === "advanced"}
-                        disabled={item?.attributes?.arViewer === "basic"}
-                      />
-                    </div>
-
-                    <div
-                      className="position-absolute bottom-0 end-0 text-muted"
-                      style={{ margin: "0px 50px 50px 0 ", cursor: "pointer" }}
-                    >
-                      <Icon
-                        as={MdOutlineEdit}
-                        style={{
-                          padding: "0px 0px 5px",
-                          width: "25px",
-                          height: "25px",
-                          color: "#0D6EFD",
-                        }}
-                      ></Icon>
-                      <u
-                        style={{
-                          color: "#0D6EFD",
-                          marginLeft: "6px",
-                          fontSize: "18px",
-                        }}
-                        onClick={() => handleModalEditProductShow(item)}
+                      <Card.Text
+                        style={{ marginBottom: "8px", color: "#6C757D" }}
                       >
-                        Edit
-                      </u>
-                    </div>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          ))}
+                        Models Quantity: {modelQuantity}
+                      </Card.Text>
+
+                      {item?.attributes?.category?.data && (
+                        <Card.Text
+                          style={{
+                            margin: "16px 0px 8px 0px",
+                            color: "#6C757D",
+                          }}
+                        >
+                          Category:{" "}
+                          {item?.attributes?.category?.data?.attributes?.name}
+                        </Card.Text>
+                      )}
+
+                      <Card.Text
+                        style={{ margin: "16px 0px 8px 0px", color: "#6C757D" }}
+                      >
+                        Tryout Link:{" "}
+                        {item?.attributes?.tryoutLink !== "" &&
+                        item?.attributes?.tryoutLink ? (
+                          <a
+                            target="_blank"
+                            href={`${item?.attributes?.tryoutLink}`}
+                          >
+                            {item?.attributes?.tryoutLink}
+                          </a>
+                        ) : (
+                          "Not Available"
+                        )}
+                      </Card.Text>
+                      <Card.Text
+                        style={{
+                          margin: "16px 0px 16px 0px",
+                          color: "#212529",
+                          fontSize: "20px",
+                          textAlign: "left",
+                        }}
+                      >
+                        {item?.attributes?.description}
+                      </Card.Text>
+
+                      <div key="inline-radio" className="mb-3">
+                        <Form.Check
+                          inline
+                          label="Basic"
+                          value="basic"
+                          name="group1"
+                          type="radio"
+                          id="inline-radio-1"
+                          checked={item?.attributes?.arViewer === "basic"}
+                          disabled={item?.attributes?.arViewer === "advanced"}
+                        />
+                        <Form.Check
+                          inline
+                          label="Advanced"
+                          value="advanced"
+                          name="group1"
+                          type="radio"
+                          id="inline-radio-2"
+                          checked={item?.attributes?.arViewer === "advanced"}
+                          disabled={item?.attributes?.arViewer === "basic"}
+                        />
+                      </div>
+
+                      <div
+                        className="position-absolute bottom-0 end-0 text-muted"
+                        style={{
+                          margin: "0px 50px 50px 0 ",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <Icon
+                          as={MdOutlineEdit}
+                          style={{
+                            padding: "0px 0px 5px",
+                            width: "25px",
+                            height: "25px",
+                            color: "#0D6EFD",
+                          }}
+                        ></Icon>
+                        <u
+                          style={{
+                            color: "#0D6EFD",
+                            marginLeft: "6px",
+                            fontSize: "18px",
+                          }}
+                          onClick={() => handleModalEditProductShow(item)}
+                        >
+                          Edit
+                        </u>
+                      </div>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
+            ))
+          )}
 
           <Card.Title
             style={{

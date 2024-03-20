@@ -10,7 +10,6 @@ import routes from "routes.js";
 // Custom Chakra theme
 const Dashboard = memo((props) => {
   const { ...rest } = props;
-  console.log("...rest", { ...rest });
   // states and functions
   const [fixed] = useState(false);
   const [toggleSidebar, setToggleSidebar] = useState(false);

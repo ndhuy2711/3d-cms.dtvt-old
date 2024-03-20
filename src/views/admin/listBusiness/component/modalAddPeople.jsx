@@ -65,6 +65,7 @@ const ModalAddPeople = ({
             role: role,
             businessId: idBusiness,
             userType: "3dcms",
+            statusTrial: true,
           },
           {
             headers: {

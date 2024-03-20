@@ -105,7 +105,7 @@ const ModalPresets = ({
             <Button
               variant="primary"
               style={{ margin: "15px 10px 15px 60px" }}
-              onClick={() => {
+              onClick={(event) => {
                 setShowModalAddPreset(true);
                 setShowModalPresets(false);
               }}
@@ -242,12 +242,14 @@ const ModalPresets = ({
         </Modal.Body>
       </Modal>
 
-      <ModalAddPresets
-        showModalAddPreset={showModalAddPreset}
-        handleModalAddPresetClose={handleModalAddPresetClose}
-        idBusiness={idBusiness}
-        getJWTToken={getJWTToken}
-      />
+      {showModalAddPreset && (
+        <ModalAddPresets
+          showModalAddPreset={showModalAddPreset}
+          handleModalAddPresetClose={handleModalAddPresetClose}
+          idBusiness={idBusiness}
+          getJWTToken={getJWTToken}
+        />
+      )}
 
       <ModalDeletePreset
         showModalDeletePreset={showModalDeletePreset}

@@ -27,7 +27,7 @@ import {
 import ModalPresets from "./component/modalPresets";
 import ModalProjectName from "./component/modalProjectName";
 import ModalAddProjectName from "./component/modalAddProjectName";
-import { Skeleton, Stack } from "@chakra-ui/react";
+import { SkeletonText } from "@chakra-ui/react";
 
 const ListBusiness = () => {
   const getJWTToken = localStorage.getItem("dtvt");
@@ -140,7 +140,6 @@ const ListBusiness = () => {
       .then((result) => {
         const role = result.data[0].role.name;
         const businessID = result.data[0].businessId;
-        console.log("role", role);
         const checkRoleManagerAll = roleManagerAll.find(
           (item) => item.role === role
         );
@@ -327,39 +326,74 @@ const ListBusiness = () => {
             <tbody>
               <tr>
                 <td>
-                  <Stack>
-                    <Skeleton height="20px" />
-                    <Skeleton height="20px" />
-                    <Skeleton height="20px" />
-                  </Stack>
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
                 </td>
                 <td>
-                  <Stack>
-                    <Skeleton height="20px" />
-                    <Skeleton height="20px" />
-                    <Skeleton height="20px" />
-                  </Stack>
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
                 </td>
                 <td>
-                  <Stack>
-                    <Skeleton height="20px" />
-                    <Skeleton height="20px" />
-                    <Skeleton height="20px" />
-                  </Stack>
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
                 </td>
                 <td>
-                  <Stack>
-                    <Skeleton height="20px" />
-                    <Skeleton height="20px" />
-                    <Skeleton height="20px" />
-                  </Stack>
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
                 </td>
                 <td>
-                  <Stack>
-                    <Skeleton height="20px" />
-                    <Skeleton height="20px" />
-                    <Skeleton height="20px" />
-                  </Stack>
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
                 </td>
               </tr>
             </tbody>
@@ -543,6 +577,7 @@ const ListBusiness = () => {
                   padding: "18px",
                   borderRadius: "2px",
                   position: "relative",
+                  minHeight: "60px",
                 }}
               >
                 <span>{codeIntegrationHead}</span>
@@ -575,6 +610,7 @@ const ListBusiness = () => {
                   padding: "18px",
                   borderRadius: "2px",
                   position: "relative",
+                  minHeight: "60px",
                 }}
               >
                 <span>{codeIntegrationBody}</span>
@@ -624,15 +660,13 @@ const ListBusiness = () => {
         />
       )}
 
-      {showModalPresets && (
-        <ModalPresets
-          showModalPresets={showModalPresets}
-          setShowModalPresets={setShowModalPresets}
-          handleModalPresetsClose={handleModalPresetsClose}
-          getJWTToken={getJWTToken}
-          idBusiness={idBusiness}
-        />
-      )}
+      <ModalPresets
+        showModalPresets={showModalPresets}
+        setShowModalPresets={setShowModalPresets}
+        handleModalPresetsClose={handleModalPresetsClose}
+        getJWTToken={getJWTToken}
+        idBusiness={idBusiness}
+      />
       {showModalProjectName && (
         <ModalProjectName
           showModalProjectName={showModalProjectName}
