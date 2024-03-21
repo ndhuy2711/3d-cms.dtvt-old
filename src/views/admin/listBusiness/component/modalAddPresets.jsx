@@ -107,7 +107,8 @@ export default function ModalAddPresets(props) {
           <Form.Group
             controlId="validationBusinessId"
             style={{
-              margin: "5px 0",
+              margin: "5px 10px 5px 0",
+              float: "left",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -121,10 +122,12 @@ export default function ModalAddPresets(props) {
           <Form.Group
             controlId="validationPresetName"
             style={{
-              margin: "5px 0",
+              margin: "5px 10px 5px 0",
+              float: "left",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
+              width: "60%",
             }}
           >
             <Form.Label>Preset name</Form.Label>
@@ -140,7 +143,8 @@ export default function ModalAddPresets(props) {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group
+          {/* Choose asset  */}
+          {/* <Form.Group
             style={{
               margin: "5px 0",
               display: "flex",
@@ -198,7 +202,7 @@ export default function ModalAddPresets(props) {
                 )}
               </div>
             )}
-          </Form.Group>
+          </Form.Group> */}
         </Form>
       </Modal.Body>
 

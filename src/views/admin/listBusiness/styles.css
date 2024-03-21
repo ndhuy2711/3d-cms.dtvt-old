@@ -1,43 +1,43 @@
 .headerCell {
-    background: #E7F1FF !important;
-    color: #6C757D !important;
+  background: #e7f1ff !important;
+  color: #6c757d !important;
+  padding: 20px 0 !important;
+  font-size: 14px;
 }
 
 .linkShow {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .linkShow:hover {
-    color: #007bff;
-    text-decoration: underline;
+  color: #007bff;
+  text-decoration: underline;
 }
 
 .copy-button {
-    cursor: pointer;
-    user-select: none;
+  cursor: pointer;
+  user-select: none;
 }
 
 .custom-search-bar {
-    text-align: right;
+  text-align: right;
 }
 .custom-search-bar .form-control {
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    background: initial;
-    border-bottom-style: groove ;
-    width: 20%;
-    display: inline;
-  }
+  border: 1px solid #dee2e6;
+  box-shadow: none;
+  background: initial;
+  width: 20%;
+  display: inline;
+}
 .btnSearch {
-    display: inline-block;
-    cursor: pointer;
+  display: inline-block;
+  cursor: pointer;
 }
 .btnSearch:hover {
-    scale: 1.5;
+  scale: 1.5;
 }
 .search {
-    margin-bottom: 15px;
-    border-radius: 8px !important;
-    padding: 5px 0;
+  margin-bottom: 15px;
+  border-radius: 8px !important;
+  padding: 5px 0;
 }

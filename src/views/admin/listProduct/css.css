@@ -6,12 +6,10 @@
     text-align: right;
 }
 .custom-search-bar .form-control {
-    border: none;
-    border-radius: 0;
+    border: 1px solid #dee2e6;
     box-shadow: none;
     background: initial;
-    border-bottom-style: groove ;
-    width: 20%;
+    width: 30%;
     display: inline;
   }
 .btnSearch {

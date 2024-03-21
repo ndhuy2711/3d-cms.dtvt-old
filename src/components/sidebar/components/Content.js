@@ -1,47 +1,17 @@
-// chakra imports
-
 import { Box, Flex, Stack } from "@chakra-ui/react";
-
-//   Custom components
-
+import { Button } from "antd";
 import Brand from "components/sidebar/components/Brand";
-
 import Links from "components/sidebar/components/Links";
-
-import SidebarCard from "components/sidebar/components/SidebarCard";
-
 import React from "react";
-
 import { IoIosLogOut } from "react-icons/io";
-
 import "./Tooltip.css";
 
 const handleLogout = () => {
   localStorage.removeItem("dtvt");
   window.location.reload();
 };
-
-const handleMouseOver = () => {
-  const tooltip = document.querySelector(".tooltip-content");
-
-  tooltip.style.display = "block";
-};
-
-const handleMouseOut = () => {
-  const tooltip = document.querySelector(".tooltip-content");
-
-  tooltip.style.display = "none";
-};
-
-// FUNCTIONS
-
-// HIDE SidebarCard
-
 function SidebarContent(props) {
   const { routes } = props;
-
-  // SIDEBAR
-
   return (
     <Flex
       direction="column"
@@ -52,29 +22,20 @@ function SidebarContent(props) {
       gap="35px"
     >
       <Brand />
-
       <Stack direction="column" mb="auto" mt="8px">
         <Box ps="20px" pe={{ md: "16px", "2xl": "1px" }}>
           <Links routes={routes} />
         </Box>
       </Stack>
-
       <Box mb="90px" display="flex" justifyContent="center">
-        {/* <SidebarCard /> */}
-
-        <div style={{ position: "relative", cursor: "pointer" }}>
-          <div className="tooltip-content">Log Out</div>
-
-          <div
-            onClick={handleLogout}
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
-          >
-            <IoIosLogOut
-              style={{ width: "32px", height: "32px", color: "#6C757D" }}
-            />
-          </div>
-        </div>
+        <Button
+          type="text"
+          danger
+          style={{ display: "flex", alignItems: "center", fontSize: "16px", padding: "20px" }}
+          onClick={handleLogout}
+        >
+          <IoIosLogOut style={{ marginRight: "5px" , fontSize: "20px" }} /> Logout
+        </Button>
       </Box>
     </Flex>
   );

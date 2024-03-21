@@ -735,7 +735,11 @@ const DetailProduct = () => {
             data.map((item, index) => (
               <Card
                 key={index}
-                style={{ margin: "30px 10px", borderRadius: "16px" }}
+                style={{
+                  margin: "30px 10px",
+                  borderRadius: "16px",
+                  background: "#f8f9fb",
+                }}
               >
                 <Card.Body>
                   <Row>
@@ -841,34 +845,30 @@ const DetailProduct = () => {
                           disabled={item?.attributes?.arViewer === "basic"}
                         />
                       </div>
-
-                      <div
-                        className="position-absolute bottom-0 end-0 text-muted"
+                      <Button
+                        variant="outline-primary"
+                        className="position-absolute bottom-0 end-0"
+                        onClick={() => handleModalEditProductShow(item)}
                         style={{
                           margin: "0px 50px 50px 0 ",
-                          cursor: "pointer",
                         }}
                       >
-                        <Icon
-                          as={MdOutlineEdit}
+                        <div
                           style={{
-                            padding: "0px 0px 5px",
-                            width: "25px",
-                            height: "25px",
-                            color: "#0D6EFD",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
                           }}
-                        ></Icon>
-                        <u
-                          style={{
-                            color: "#0D6EFD",
-                            marginLeft: "6px",
-                            fontSize: "18px",
-                          }}
-                          onClick={() => handleModalEditProductShow(item)}
                         >
+                          <Icon
+                            as={MdOutlineEdit}
+                            style={{
+                              marginRight: "5px",
+                            }}
+                          ></Icon>{" "}
                           Edit
-                        </u>
-                      </div>
+                        </div>
+                      </Button>
                     </Col>
                   </Row>
                 </Card.Body>

@@ -173,17 +173,24 @@ const ListProduct = () => {
             id="myInput"
             onKeyUp={fillter}
             type="text"
-            placeholder="Search"
+            placeholder="Search name of product"
             className="mr-sm-2 custom-input"
           />
-          <BsSearch className="btnSearch" />
           <Button
             onClick={handleModalAddProductShow}
             variant="primary"
             style={{ margin: "15px 10px 15px 60px" }}
             disabled={isButtonAddDisabled}
           >
-            <CgAddR style={{ display: "inline-block" }} /> Add new product{" "}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CgAddR style={{ marginRight: "5px" }} /> Add new product
+            </div>
           </Button>
         </Form>
 
@@ -250,6 +257,7 @@ const ListProduct = () => {
                       margin: "30px 10px",
                       borderRadius: "16px",
                       clear: "both",
+                      background: "#f8f9fb",
                     }}
                   >
                     <Card.Body>
@@ -351,43 +359,35 @@ const ListProduct = () => {
                               to={`/admin/list-products/detail-product?id=${businessId}&&productID=${item?.attributes?.productId}`}
                               className="btnView"
                             >
-                              {" "}
                               View Product Detail{" "}
                             </Link>
                           </Button>
-
-                          <div
-                            className="position-absolute bottom-0 end-0 text-muted"
+                          <Button
+                            variant="outline-danger"
+                            className="position-absolute bottom-0 end-0"
                             style={{ margin: "0px 50px 50px 0 " }}
+                            onClick={
+                              !isButtonDeleteDisabled
+                                ? () => handleModalDeleteProductShow(item)
+                                : () => {}
+                            }
                           >
-                            <Icon
-                              as={ImBin}
+                            <div
                               style={{
-                                padding: "0px 0px 5px",
-                                width: "25px",
-                                height: "25px",
-                                color: "#c59090",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
-                            />
-
-                            <u
-                              style={{
-                                color: "#c59090",
-                                marginLeft: "8px",
-                                textDecoration: "underline",
-                                fontSize: "18px",
-                                cursor: "pointer",
-                                disabled: "none",
-                              }}
-                              onClick={
-                                !isButtonDeleteDisabled
-                                  ? () => handleModalDeleteProductShow(item)
-                                  : () => {}
-                              }
                             >
+                              <Icon
+                                as={ImBin}
+                                style={{
+                                  marginRight: "5px",
+                                }}
+                              />
                               Delete
-                            </u>
-                          </div>
+                            </div>
+                          </Button>
                         </Col>
                       </Row>
                     </Card.Body>

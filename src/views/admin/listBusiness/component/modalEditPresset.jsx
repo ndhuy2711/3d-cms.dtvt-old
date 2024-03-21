@@ -81,6 +81,7 @@ export function ModalEditPreset(props) {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
+              width: "60%",
             }}
           >
             <Form.Label>Preset name</Form.Label>

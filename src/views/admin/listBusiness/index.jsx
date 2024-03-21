@@ -28,6 +28,7 @@ import ModalPresets from "./component/modalPresets";
 import ModalProjectName from "./component/modalProjectName";
 import ModalAddProjectName from "./component/modalAddProjectName";
 import { SkeletonText } from "@chakra-ui/react";
+import avatar from "../../../assets/img/avatar.jpg";
 
 const ListBusiness = () => {
   const getJWTToken = localStorage.getItem("dtvt");
@@ -287,7 +288,7 @@ const ListBusiness = () => {
         <Form className="custom-search-bar">
           <FormControl
             type="text"
-            placeholder="Search"
+            placeholder="Search name of business"
             className="mr-sm-2 custom-input search"
             id="myInput"
             onKeyUp={fillter}
@@ -299,7 +300,15 @@ const ListBusiness = () => {
               onClick={handleModalAddPartnerShow}
               disabled={isButtonAddDisabled}
             >
-              <CgAddR style={{ display: "inline-block" }} /> Add new partner{" "}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <CgAddR style={{ marginRight: "5px" }} /> Add new partner{" "}
+              </div>
             </Button>
           ) : (
             ""
@@ -308,18 +317,19 @@ const ListBusiness = () => {
 
         <Table
           id="myTable"
+          striped
           bordered
           hover
           className="text-center"
-          style={{ borderRadius: "15px", overflow: "hidden" }}
+          style={{ borderRadius: "15px", overflow: "hidden", margin: "10px 0" }}
         >
-          <thead>
+          <thead style={{ minHeight: "50px" }}>
             <tr>
-              <th className="headerCell">Name of business</th>
-              <th className="headerCell">Client ID number</th>
-              <th className="headerCell">Person in charge</th>
-              <th className="headerCell">Preset</th>
-              <th className="headerCell">Action</th>
+              <th className="headerCell">NAME OF BUSINESS</th>
+              <th className="headerCell">CLIENT ID NUMBER</th>
+              <th className="headerCell">PERSON IN CHARGE</th>
+              <th className="headerCell">PRESET</th>
+              <th className="headerCell">ACTION</th>
             </tr>
           </thead>
           {data.length === 0 ? (
@@ -332,6 +342,8 @@ const ListBusiness = () => {
                     spacing="4"
                     skeletonHeight="2"
                   />
+                </td>
+                <td>
                   <SkeletonText
                     mt="4"
                     noOfLines={4}
@@ -346,12 +358,6 @@ const ListBusiness = () => {
                     spacing="4"
                     skeletonHeight="2"
                   />
-                  <SkeletonText
-                    mt="4"
-                    noOfLines={4}
-                    spacing="4"
-                    skeletonHeight="2"
-                  />
                 </td>
                 <td>
                   <SkeletonText
@@ -360,34 +366,8 @@ const ListBusiness = () => {
                     spacing="4"
                     skeletonHeight="2"
                   />
-                  <SkeletonText
-                    mt="4"
-                    noOfLines={4}
-                    spacing="4"
-                    skeletonHeight="2"
-                  />
                 </td>
                 <td>
-                  <SkeletonText
-                    mt="4"
-                    noOfLines={4}
-                    spacing="4"
-                    skeletonHeight="2"
-                  />
-                  <SkeletonText
-                    mt="4"
-                    noOfLines={4}
-                    spacing="4"
-                    skeletonHeight="2"
-                  />
-                </td>
-                <td>
-                  <SkeletonText
-                    mt="4"
-                    noOfLines={4}
-                    spacing="4"
-                    skeletonHeight="2"
-                  />
                   <SkeletonText
                     mt="4"
                     noOfLines={4}
@@ -398,25 +378,24 @@ const ListBusiness = () => {
               </tr>
             </tbody>
           ) : (
-            <tbody>
+            <tbody style={{ fontSize: "15px", fontWeight: "300" }}>
               {data.map((item, index) => {
                 return (
                   <tr key={index}>
-                    <td style={{ verticalAlign: "middle" }}>
+                    <td>
                       <div
                         style={{
-                          alignItems: "center",
                           display: "flex",
-                          flexDirection: "row",
-                          paddingLeft: "35%",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
                         <div
                           style={{
-                            width: "40px",
-                            height: "40px",
-                            objectFit: "cover",
-                            position: "relative",
+                            width: "40%",
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            paddingRight: "10px",
                           }}
                         >
                           <img
@@ -432,13 +411,9 @@ const ListBusiness = () => {
                         </div>
                         <div
                           style={{
-                            alignItems: "center",
-                            display: "inline-flex",
-                            flex: "0 0 auto",
-                            gap: "10px",
-                            justifyContent: "center",
-                            padding: "10px 10px 10px 16px",
-                            position: "relative",
+                            width: "60%",
+                            display: "flex",
+                            justifyContent: "flex-start",
                           }}
                         >
                           <Link
@@ -449,24 +424,30 @@ const ListBusiness = () => {
                         </div>
                       </div>
                     </td>
-                    <td style={{ verticalAlign: "middle" }}>
+                    <td
+                      style={{
+                        verticalAlign: "middle",
+                        fontSize: "14px !important",
+                        padding: "0",
+                      }}
+                    >
                       {item?.attributes?.businessId}
                     </td>
-                    <td style={{ verticalAlign: "middle" }}>
+
+                    <td>
                       <div
                         style={{
-                          alignItems: "center",
                           display: "flex",
-                          flexDirection: "row",
-                          paddingLeft: "35%",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
                         <div
                           style={{
-                            width: "40px",
-                            height: "40px",
-                            objectFit: "cover",
-                            position: "relative",
+                            width: "45%",
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            paddingRight: "10px",
                           }}
                         >
                           <img
@@ -476,26 +457,32 @@ const ListBusiness = () => {
                               height: "40px",
                               objectFit: "cover",
                             }}
-                            src={`${urlStrapi}/${item?.attributes?.avatar?.data?.attributes?.url}`}
+                            src={
+                              item?.attributes?.ManagerImage
+                                ? `${urlStrapi}/${item?.attributes?.ManagerImage}`
+                                : avatar
+                            }
                             alt="null"
                           />
                         </div>
                         <div
                           style={{
-                            alignItems: "center",
-                            display: "inline-flex",
-                            flex: "0 0 auto",
-                            gap: "10px",
-                            justifyContent: "center",
-                            padding: "10px 10px 10px 16px",
-                            position: "relative",
+                            width: "55%",
+                            display: "flex",
+                            justifyContent: "flex-start",
                           }}
                         >
                           {item?.attributes?.Manager}
                         </div>
                       </div>
                     </td>
-                    <td style={{ verticalAlign: "middle" }}>
+                    <td
+                      style={{
+                        verticalAlign: "middle",
+                        fontSize: "14px !important",
+                        padding: "0",
+                      }}
+                    >
                       <p
                         className="linkShow"
                         onClick={() => {
@@ -505,45 +492,52 @@ const ListBusiness = () => {
                           );
                         }}
                       >
-                        <Badge bg="secondary">
+                        <Badge
+                          bg="secondary"
+                          style={{ fontSize: "14px", fontWeight: "500" }}
+                        >
                           {item?.attributes?.presets?.data?.length}
                         </Badge>
                       </p>
                     </td>
-                    <td
-                      style={{
-                        verticalAlign: "middle",
-                        textAlign: "left",
-                        width: "20%",
-                      }}
-                    >
-                      {roleName !== "checkRoleUser" ? (
+                    <td>
+                      <div
+                        style={{
+                          display: "flex",
+                          verticalAlign: "middle",
+                          fontSize: "15px",
+                          flexDirection: "column",
+                        }}
+                      >
+                        {roleName !== "checkRoleUser" ? (
+                          <p
+                            className="linkShow"
+                            onClick={() => {
+                              handleModaAddPeopleShow();
+                              setIdBusiness(item?.attributes?.businessId);
+                            }}
+                            disabled={isButtonAddPeopleDisabled}
+                          >
+                            {" "}
+                            <CgAddR style={{ display: "inline-block" }} /> add
+                            people{" "}
+                          </p>
+                        ) : (
+                          ""
+                        )}
                         <p
                           className="linkShow"
                           onClick={() => {
-                            handleModaAddPeopleShow();
-                            setIdBusiness(item?.attributes?.businessId);
+                            handleModalSnippetShow(item);
                           }}
-                          disabled={isButtonAddPeopleDisabled}
                         >
                           {" "}
-                          <CgAddR style={{ display: "inline-block" }} /> add
-                          people{" "}
+                          <CgCodeSlash
+                            style={{ display: "inline-block" }}
+                          />{" "}
+                          generate code snippet{" "}
                         </p>
-                      ) : (
-                        ""
-                      )}
-
-                      <p
-                        className="linkShow"
-                        onClick={() => {
-                          handleModalSnippetShow(item);
-                        }}
-                      >
-                        {" "}
-                        <CgCodeSlash style={{ display: "inline-block" }} />{" "}
-                        generate code snippet{" "}
-                      </p>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -551,7 +545,6 @@ const ListBusiness = () => {
             </tbody>
           )}
         </Table>
-
         {showModalSnippet && (
           <Modal
             show={showModalSnippet}

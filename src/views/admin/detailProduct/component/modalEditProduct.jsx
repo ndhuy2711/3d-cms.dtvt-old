@@ -1,14 +1,6 @@
 import { http, urlStrapi } from "../../../../axios/init";
 import { useEffect, useState, useRef } from "react";
-import {
-  Modal,
-  Form,
-  Button,
-  Row,
-  Col,
-  Image,
-  Spinner,
-} from "react-bootstrap";
+import { Modal, Form, Button, Row, Col, Image, Spinner } from "react-bootstrap";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
 const ModalEditProduct = ({
   showModalEditProduct,
@@ -49,19 +41,19 @@ const ModalEditProduct = ({
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    http.get(`categories`,
-      {
+    http
+      .get(`categories`, {
         headers: {
           Authorization: `Bearer ${getJWTToken}`,
         },
-      }
-    ).then((res) => {
-      setCategory(res.data.data)
-    })
-      .catch((err) => {
-        console.log(err)
       })
-  }, [])
+      .then((res) => {
+        setCategory(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleEdit = (event) => {
     const form = event.currentTarget;
@@ -145,7 +137,7 @@ const ModalEditProduct = ({
                       },
                     })
                     .then((res) => {
-                      const imgURL =urlStrapi + res.data[0].url;
+                      const imgURL = urlStrapi + res.data[0].url;
                       const imgId = res.data[0].id;
                       http
                         .put(
@@ -178,7 +170,6 @@ const ModalEditProduct = ({
                         });
                     });
                 });
-
             }
           }
         });
@@ -212,7 +203,7 @@ const ModalEditProduct = ({
 
   const handleChangeRadio = (e) => {
     setSelectOption(e.target.value);
-  }
+  };
 
   const handleCloseModelEdit = () => {
     setProductId(data[0].attributes.productId);
@@ -221,11 +212,13 @@ const ModalEditProduct = ({
     setCategoryName(data[0].attributes?.category?.data?.id);
     setProductTryoutLink(data[0].attributes?.tryoutLink);
     setProductDescription(data[0].attributes.description);
-    setImageSrc(`${urlStrapi}/${data[0]?.attributes?.testImage?.data?.attributes?.url}`);
+    setImageSrc(
+      `${urlStrapi}/${data[0]?.attributes?.testImage?.data?.attributes?.url}`
+    );
     setSelectOption(data[0].attributes.arViewer);
 
-    handleModalEditProductClose()
-  }
+    handleModalEditProductClose();
+  };
 
   if (alertMessageEdit) {
     setTimeout(() => {
@@ -234,15 +227,15 @@ const ModalEditProduct = ({
   }
   if (limitedSizeThumb) {
     setTimeout(() => {
-      setLimitedSizeThumb(false)
-    }, 2000)
+      setLimitedSizeThumb(false);
+    }, 2000);
   }
   return (
     <>
       <Modal
         show={showModalEditProduct}
         onHide={() => {
-          handleCloseModelEdit()
+          handleCloseModelEdit();
         }}
         size="lg"
       >
@@ -252,25 +245,25 @@ const ModalEditProduct = ({
           </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ marginLeft: "50px" }}>
-          <p>
+          <p
+            style={{ color: "#6c757d", marginBottom: "10px", fontSize: "14px" }}
+          >
             Fill out the following details as prompted below to edit a product
             profile to your product list.
           </p>
-          <Form
-            noValidate
-            validated={validated}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              width: "540px",
-              paddingLeft: "0px",
-              margin: "30px 0",
-            }}
-          >
-            <Form.Group>
+          <Form noValidate validated={validated}>
+            <Form.Group
+              style={{
+                float: "left",
+                margin: "5px 5% 5px 0",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                width: "25%",
+              }}
+            >
               <Form.Label>Product ID</Form.Label>
               <Form.Control
-                style={{ width: "513px" }}
                 type="text"
                 placeholder="Enter Product ID"
                 value={newProductId}
@@ -278,8 +271,8 @@ const ModalEditProduct = ({
                   const value = e.target.value;
                   if (/^[a-zA-Z0-9]*$/.test(value)) {
                     setNewProductId(value);
-                  } else if (value === '') {
-                    setNewProductId('');
+                  } else if (value === "") {
+                    setNewProductId("");
                   }
                 }}
                 maxLength={20}
@@ -301,16 +294,17 @@ const ModalEditProduct = ({
             <Form.Group
               controlId="validationProductName"
               style={{
+                float: "left",
                 margin: "5px 0",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
+                width: "60%",
               }}
             >
               <Form.Label>Product name</Form.Label>
 
               <Form.Control
-                style={{ width: "513px" }}
                 type="text"
                 placeholder="Enter product name"
                 value={productName}
@@ -323,10 +317,19 @@ const ModalEditProduct = ({
                 Please enter product name
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group>
+            <Form.Group
+              style={{
+                clear: "both",
+                margin: "10px 0",
+                paddingTop: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                width: "90%",
+              }}
+            >
               <Form.Label>Try out link</Form.Label>
               <Form.Control
-                style={{ width: "513px" }}
                 type="text"
                 placeholder="Enter product try out link"
                 value={productTryoutLink}
@@ -337,28 +340,27 @@ const ModalEditProduct = ({
             <Form.Group
               controlId="validationProductName"
               style={{
-                margin: "5px 0",
-
+                margin: "5px 5% 5px 0",
                 display: "flex",
-
                 flexDirection: "column",
-
                 justifyContent: "space-between",
+                float: "left",
+                width: "60%",
               }}
             >
               <Form.Label>Category</Form.Label>
-
               <Form.Control
-                style={{ width: "513px" }}
                 as="select"
                 placeholder="Enter product name"
                 value={categoryName}
                 onChange={(e) => setCategoryName(e.target.value)}
                 required
               >
-                <option value="" disabled>Select a category</option>
+                <option value="" disabled>
+                  Select a category
+                </option>
                 {category.map((item) => (
-                  <option value={item?.id} >{item?.attributes?.name}</option>
+                  <option value={item?.id}>{item?.attributes?.name}</option>
                 ))}
               </Form.Control>
 
@@ -367,7 +369,17 @@ const ModalEditProduct = ({
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mt-2">
+            <Form.Group
+              className="mt-2"
+              style={{
+                float: "left",
+                margin: "5px 0",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                width: "25%",
+              }}
+            >
               <Form.Label>Ar Viewer</Form.Label>
               <div key="inline-radio" className="mb-1">
                 <Form.Check
@@ -395,15 +407,17 @@ const ModalEditProduct = ({
             <Form.Group
               controlId="validationProductDescription"
               style={{
-                margin: "5px 0",
+                clear: "both",
+                margin: "10px 0",
+                paddingTop: "10px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
+                width: "90%",
               }}
             >
               <Form.Label>Product description</Form.Label>
               <Form.Control
-                style={{ width: "513px" }}
                 type="text"
                 placeholder="Enter Product description"
                 value={productDescription}
@@ -447,6 +461,11 @@ const ModalEditProduct = ({
                 ref={fileInputRef}
                 isInvalid={limitedSizeThumb}
               />
+              <Form.Text className="text-muted">
+                Limit the file to 300kB & format of file " .jpg, .jpeg, .png,
+                .gif "
+              </Form.Text>
+
               <Form.Control.Feedback type="invalid">
                 <>
                   This file is too big to load. Please limit the file to &lt;
@@ -457,9 +476,12 @@ const ModalEditProduct = ({
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => {
-            handleCloseModelEdit()
-          }}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              handleCloseModelEdit();
+            }}
+          >
             Close
           </Button>
           <Button

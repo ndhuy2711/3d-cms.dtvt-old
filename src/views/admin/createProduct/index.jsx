@@ -1,74 +1,52 @@
 import { Textarea } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
-import {
-  Form,
-  Button,
-  Modal,
-  Spinner,
-} from "react-bootstrap";
-
+import { Form, Button, Modal, Spinner } from "react-bootstrap";
 import axios from "axios";
-
 import { http, urlStrapi } from "../../../axios/init";
-
-import QRCode from 'qrcode';
+import QRCode from "qrcode";
 
 const CreateProduct = ({
   showModalAddProduct,
-
   handleModalAddProductClose,
-
   getJWTToken,
-
   getIDBusiness,
-
   onSubmitSuccess,
-
   setIsButtonAddDisabled,
 }) => {
   const [productName, setProductName] = useState("");
   const [nameAsset, setNameAsset] = useState("");
-
   const [category, setCategory] = useState([]);
   const [categoryName, setCategoryName] = useState("");
-
   const [productId, setProductId] = useState("");
   const [tryoutLink, setTryoutLink] = useState("");
-
   const [productDescription, setProductDescription] = useState("");
-
   const [selectedFile, setSelectedFile] = useState(null);
   const [limitedSizeThumb, setLimitedSizeThumb] = useState(false);
   const MAX_FILE_SIZE_THUMB = 300 * 1024; // KB
-
   const [selectedFiles, setSelectedFiles] = useState(null);
   const [limitedSize, setLimitedSize] = useState(false);
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // MB
-
   const [validated, setValidated] = useState(false);
-
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
   const [isProcessing, setIsProcessing] = useState(false);
   const [alertMessageAdd, setAlertMessageAdd] = useState(false);
-
   const [selectOption, setSelectOption] = useState("basic");
 
   useEffect(() => {
-    http.get(`categories`,
-      {
+    http
+      .get(`categories`, {
         headers: {
           Authorization: `Bearer ${getJWTToken}`,
         },
-      }
-    ).then((res) => {
-      setCategory(res.data.data)
-    })
-      .catch((err) => {
-        console.log(err)
       })
-  }, [])
+      .then((res) => {
+        setCategory(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]; // Lấy tệp đầu tiên trong danh sách đã chọn
@@ -79,61 +57,42 @@ const CreateProduct = ({
       setSelectedFile(null);
     } else {
       setLimitedSizeThumb(false);
-
       if (file) {
         const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif"]; // Các phần mở rộng cho tệp ảnh
-
         const fileExtension = file.name.substring(file.name.lastIndexOf("."));
-
         if (allowedExtensions.includes(fileExtension.toLowerCase())) {
-          // Nếu phần mở rộng hợp lệ, lưu tệp vào state
-
           setSelectedFile(file);
-
         } else {
-          // Nếu phần mở rộng không hợp lệ, đặt trường input về trạng thái trống
-
           e.target.value = null;
-
           setSelectedFile(null);
-
           console.error("Invalid file type. Please select an image file.");
         }
       }
     }
-
-    // Kiểm tra phần mở rộng của tệp (extension)
   };
 
   const handleFilesChange = (e) => {
     const file = e.target.files[0]; // Lấy tệp đầu tiên trong danh sách đã chọn
-
     if (file && file.size > MAX_FILE_SIZE) {
-      // TODO
       setLimitedSize(true);
       setSelectedFiles(null);
     } else {
       setLimitedSize(false);
-
-      // Kiểm tra phần mở rộng của tệp (extension)
-
       if (file) {
-        const allowedExtensions = [".obj", ".blend", ".fbx", ".gltf", ".glb", ".zip"]; // Các phần mở rộng cho tệp ảnh
-
+        const allowedExtensions = [
+          ".obj",
+          ".blend",
+          ".fbx",
+          ".gltf",
+          ".glb",
+          ".zip",
+        ]; // Các phần mở rộng cho tệp ảnh
         const fileExtension = file.name.substring(file.name.lastIndexOf("."));
-
         if (allowedExtensions.includes(fileExtension.toLowerCase())) {
-          // Nếu phần mở rộng hợp lệ, lưu tệp vào state
-
           setSelectedFiles(file);
-
         } else {
-          // Nếu phần mở rộng không hợp lệ, đặt trường input về trạng thái trống
-
           e.target.value = null;
-
           setSelectedFiles(null);
-
           console.error("Invalid file type. Please select an image file.");
         }
       }
@@ -154,7 +113,7 @@ const CreateProduct = ({
       getIDBusiness,
       selectedFile,
       selectedFiles,
-      nameAsset
+      nameAsset,
     };
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -184,7 +143,7 @@ const CreateProduct = ({
           },
         })
         .then((res) => {
-          const tokenSket = res.data.data[0].attributes.sketchfabCredentialCode
+          const tokenSket = res.data.data[0].attributes.sketchfabCredentialCode;
           http
             .get(`/products?filters[productId][$eq]=${productId}&populate=*`, {
               headers: {
@@ -219,119 +178,127 @@ const CreateProduct = ({
                         Authorization: "Bearer " + tokenSket,
                       },
                       data: formDataSketchfab,
-                    }).then((res) => {
-                      if (res.status === 201) {
-                        const uidResponse = res.data.uid;
+                    })
+                      .then((res) => {
+                        if (res.status === 201) {
+                          const uidResponse = res.data.uid;
 
-                        const qrCodeOptions = {
-                          errorCorrectionLevel: 'H',
-                          type: 'image/png',
-                          rendererOpts: {
-                            quality: 1.0,
-                          },
-                          scale: 20,
-                        };
-                        QRCode.toDataURL(uidResponse, qrCodeOptions)
-                          .then((url) => {
-                            // save code
-                            const arrayBuffer = Uint8Array.from(atob(url.split(',')[1]), c => c.charCodeAt(0)).buffer;
-                            const formDataQR = new FormData();
-                            const fileName = "QRCode_" + uidResponse + ".png"
-                            formDataQR.append('files', new File([arrayBuffer], fileName, { type: 'image/png' }));
-                            // const fileQR = base64toFile(base64Data, fileName)
-                            // formData.append('files', fileQR);
-                            http
-                              .post("/upload", formDataQR, {
-                                headers: {
-                                  "Content-Type": "multipart/form-data",
-                                  Authorization: `Bearer ${getJWTToken}`,
-                                },
-                              })
-                              .then((res) => {
-                                const urlImgQR = `${urlStrapi}${res.data[0].url}`;
-                                var data = {
-                                  data: {
-                                    assetUID: uidResponse,
-                                    description: formData.productName,
-                                    productId: formData.productId,
-                                    qrcode: urlImgQR,
-                                    productId: formData.tryoutLink,
-                                    isPublished: false,
-                                    thumbnail: "null",
-                                    name: formData.nameAsset
+                          const qrCodeOptions = {
+                            errorCorrectionLevel: "H",
+                            type: "image/png",
+                            rendererOpts: {
+                              quality: 1.0,
+                            },
+                            scale: 20,
+                          };
+                          QRCode.toDataURL(uidResponse, qrCodeOptions)
+                            .then((url) => {
+                              // save code
+                              const arrayBuffer = Uint8Array.from(
+                                atob(url.split(",")[1]),
+                                (c) => c.charCodeAt(0)
+                              ).buffer;
+                              const formDataQR = new FormData();
+                              const fileName = "QRCode_" + uidResponse + ".png";
+                              formDataQR.append(
+                                "files",
+                                new File([arrayBuffer], fileName, {
+                                  type: "image/png",
+                                })
+                              );
+                              // const fileQR = base64toFile(base64Data, fileName)
+                              // formData.append('files', fileQR);
+                              http
+                                .post("/upload", formDataQR, {
+                                  headers: {
+                                    "Content-Type": "multipart/form-data",
+                                    Authorization: `Bearer ${getJWTToken}`,
                                   },
-                                };
-                                http
-                                  .post("assets", data, {
-                                    headers: {
-                                      Authorization: `Bearer ${getJWTToken}`,
+                                })
+                                .then((res) => {
+                                  const urlImgQR = `${urlStrapi}${res.data[0].url}`;
+                                  var data = {
+                                    data: {
+                                      assetUID: uidResponse,
+                                      description: formData.productName,
+                                      productId: formData.productId,
+                                      qrcode: urlImgQR,
+                                      productId: formData.tryoutLink,
+                                      isPublished: false,
+                                      thumbnail: "null",
+                                      name: formData.nameAsset,
                                     },
-                                  })
-                                  .then((res) => {
-                                    const idAsset = res.data.data.id;
-                                    http.post(
-                                      "/products",
-
-                                      {
-                                        data: {
-                                          title: formData.productName,
-                                          assets: idAsset,
-                                          description: formData.productDescription,
-
-                                          productId: formData.productId,
-                                          tryoutLink: formData.tryoutLink,
-                                          businessId: formData.getIDBusiness,
-                                          arViewer: selectOption,
-                                          category: formData.category,
-                                          thumbnail: urlImg,
-                                          testImage: imgId,
-                                        },
+                                  };
+                                  http
+                                    .post("assets", data, {
+                                      headers: {
+                                        Authorization: `Bearer ${getJWTToken}`,
                                       },
-
-                                      {
-                                        headers: {
-                                          Authorization: `Bearer ${getJWTToken}`,
-                                        },
-                                      }
-                                    ).then((res) => {
-                                      onSubmitSuccess(
-                                        `Create new product with name ${formData.productName} was successful.`
-                                      );
-                                      handleModalInitClose();
-                                      setIsButtonDisabled(false);
-                                      setIsProcessing(false);
-                                    }).catch((er) => {
-                                      onSubmitSuccess("Fail");
-                                      handleModalInitClose();
-                                      setIsButtonDisabled(false);
-                                      setIsProcessing(false);
                                     })
-                                  });
+                                    .then((res) => {
+                                      const idAsset = res.data.data.id;
+                                      http
+                                        .post(
+                                          "/products",
 
-                              })
-                              .catch((err) => {
-                              })
-                          })
-                          .catch((err) => {
-                            console.error(err);
-                          })
+                                          {
+                                            data: {
+                                              title: formData.productName,
+                                              assets: idAsset,
+                                              description:
+                                                formData.productDescription,
 
+                                              productId: formData.productId,
+                                              tryoutLink: formData.tryoutLink,
+                                              businessId:
+                                                formData.getIDBusiness,
+                                              arViewer: selectOption,
+                                              category: formData.category,
+                                              thumbnail: urlImg,
+                                              testImage: imgId,
+                                            },
+                                          },
 
-
-
-                      }
-                      else {
+                                          {
+                                            headers: {
+                                              Authorization: `Bearer ${getJWTToken}`,
+                                            },
+                                          }
+                                        )
+                                        .then((res) => {
+                                          onSubmitSuccess(
+                                            `Create new product with name ${formData.productName} was successful.`
+                                          );
+                                          handleModalInitClose();
+                                          setIsButtonDisabled(false);
+                                          setIsProcessing(false);
+                                        })
+                                        .catch((er) => {
+                                          onSubmitSuccess("Fail");
+                                          handleModalInitClose();
+                                          setIsButtonDisabled(false);
+                                          setIsProcessing(false);
+                                        });
+                                    });
+                                })
+                                .catch((err) => {});
+                            })
+                            .catch((err) => {
+                              console.error(err);
+                            });
+                        } else {
+                          onSubmitSuccess("Fail");
+                          handleModalInitClose();
+                          setIsButtonDisabled(false);
+                          setIsProcessing(false);
+                        }
+                      })
+                      .catch((err) => {
                         onSubmitSuccess("Fail");
                         handleModalInitClose();
                         setIsButtonDisabled(false);
                         setIsProcessing(false);
-                      }
-                    }).catch((err) => {
-                      onSubmitSuccess("Fail");
-                      handleModalInitClose();
-                      setIsButtonDisabled(false);
-                      setIsProcessing(false);
-                    });
+                      });
                   });
               }
             });
@@ -341,9 +308,7 @@ const CreateProduct = ({
           handleModalInitClose();
           setIsButtonDisabled(false);
           setIsProcessing(false);
-        })
-
-
+        });
     } else {
       setIsButtonDisabled(false);
       setIsProcessing(false);
@@ -355,7 +320,7 @@ const CreateProduct = ({
     handleModalAddProductClose();
 
     setProductName("");
-    setNameAsset("")
+    setNameAsset("");
     setProductId("");
     setTryoutLink("");
     setSelectOption("basic");
@@ -371,7 +336,7 @@ const CreateProduct = ({
 
   const handleChangeRadio = (e) => {
     setSelectOption(e.target.value);
-  }
+  };
   if (alertMessageAdd) {
     setTimeout(() => {
       setAlertMessageAdd(false);
@@ -380,8 +345,8 @@ const CreateProduct = ({
   return (
     <Modal
       show={showModalAddProduct}
-      onHide={()=>{
-        handleModalInitClose()
+      onHide={() => {
+        handleModalInitClose();
       }}
       size="lg"
     >
@@ -392,41 +357,25 @@ const CreateProduct = ({
       </Modal.Header>
 
       <Modal.Body style={{ marginLeft: "50px" }}>
-        <p>
+        <p style={{ color: "#6c757d", marginBottom: "10px", fontSize: "14px" }}>
           Fill out the following details as prompted below to add a new product
           profile to your product list.
         </p>
-        <Form
-          noValidate
-          validated={validated}
-          style={{
-            display: "flex",
-
-            flexDirection: "column",
-
-            width: "540px",
-
-            paddingLeft: "0px",
-
-            margin: "30px 0",
-          }}
-        >
+        <Form noValidate validated={validated}>
           <Form.Group
             controlId="validationProductId"
             style={{
-              margin: "5px 0",
-
+              float: "left",
+              margin: "5px 5% 5px 0",
               display: "flex",
-
               flexDirection: "column",
-
               justifyContent: "space-between",
+              width: "25%",
             }}
           >
             <Form.Label>Product id</Form.Label>
 
             <Form.Control
-              style={{ width: "513px" }}
               type="text"
               maxLength={20}
               placeholder="Enter product id"
@@ -435,21 +384,18 @@ const CreateProduct = ({
                 const value = e.target.value;
                 if (/^[a-zA-Z0-9]*$/.test(value)) {
                   setProductId(value);
-                } else if (value === '') {
-                  setProductId('');
+                } else if (value === "") {
+                  setProductId("");
                 }
               }}
-
               onKeyDown={(e) => {
                 if (e.isComposing) {
                   e.preventDefault();
                 }
               }}
-
               onCompositionUpdate={(e) => {
                 e.preventDefault();
               }}
-
               autocorrect="off"
               required
             />
@@ -469,19 +415,17 @@ const CreateProduct = ({
           <Form.Group
             controlId="validationProductName"
             style={{
+              float: "left",
               margin: "5px 0",
-
               display: "flex",
-
               flexDirection: "column",
-
               justifyContent: "space-between",
+              width: "60%",
             }}
           >
             <Form.Label>Product name</Form.Label>
 
             <Form.Control
-              style={{ width: "513px" }}
               type="text"
               placeholder="Enter product name"
               value={productName}
@@ -496,19 +440,18 @@ const CreateProduct = ({
           </Form.Group>
           <Form.Group
             style={{
-              margin: "5px 0",
-
+              clear: "both",
+              margin: "10px 0",
+              paddingTop: "10px",
               display: "flex",
-
               flexDirection: "column",
-
               justifyContent: "space-between",
+              width: "90%",
             }}
           >
             <Form.Label>Tryout link</Form.Label>
 
             <Form.Control
-              style={{ width: "513px" }}
               type="text"
               placeholder="Enter tryout link"
               value={tryoutLink}
@@ -519,28 +462,28 @@ const CreateProduct = ({
           <Form.Group
             controlId="validationProductName"
             style={{
-              margin: "5px 0",
-
+              margin: "5px 5% 5px 0",
               display: "flex",
-
               flexDirection: "column",
-
               justifyContent: "space-between",
+              float: "left",
+              width: "60%",
             }}
           >
             <Form.Label>Category</Form.Label>
 
             <Form.Control
-              style={{ width: "513px" }}
               as="select"
               placeholder="Enter product name"
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
               required
             >
-              <option value="" disabled>Select a category</option>
+              <option value="" disabled>
+                Select a category
+              </option>
               {category.map((item) => (
-                <option value = {item?.id} >{item?.attributes?.name}</option>
+                <option value={item?.id}>{item?.attributes?.name}</option>
               ))}
             </Form.Control>
 
@@ -549,7 +492,17 @@ const CreateProduct = ({
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group className="mt-2">
+          <Form.Group
+            className="mt-2"
+            style={{
+              float: "left",
+              margin: "5px 0",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              width: "25%",
+            }}
+          >
             <Form.Label>Ar Viewer</Form.Label>
             <div key="inline-radio" className="mb-2">
               <Form.Check
@@ -578,19 +531,18 @@ const CreateProduct = ({
           <Form.Group
             controlId="validationProductDescription"
             style={{
-              margin: "5px 0",
-
+              clear: "both",
+              margin: "10px 0",
+              paddingTop: "10px",
               display: "flex",
-
               flexDirection: "column",
-
               justifyContent: "space-between",
+              width: "90%",
             }}
           >
             <Form.Label>Product description</Form.Label>
 
             <Form.Control
-              style={{ width: "513px" }}
               type="text"
               placeholder="Enter Product description"
               value={productDescription}
@@ -620,8 +572,12 @@ const CreateProduct = ({
               name="file"
               onChange={handleFileChange}
               isInvalid={limitedSizeThumb}
-              style={{ width: "513px" }}
+              style={{ width: "90%" }}
             />
+            <Form.Text className="text-muted">
+              Limit the file to 300kB & format of file " .jpg, .jpeg, .png, .gif
+              "
+            </Form.Text>
 
             <Form.Control.Feedback type="invalid">
               {!limitedSizeThumb ? (
@@ -647,7 +603,7 @@ const CreateProduct = ({
           <Form.Group className="position-relative mb-3">
             <Form.Label>Asset name</Form.Label>
             <Form.Control
-              style={{ width: "513px" }}
+              style={{ width: "90%" }}
               type="text"
               placeholder="Enter name asset"
               value={nameAsset}
@@ -672,6 +628,9 @@ const CreateProduct = ({
               required
             />
 
+            <Form.Text className="text-muted">
+              Limit the file to 50MB & format of file " .obj*, .blend, .fbx, .gltf, .glb, .zip "
+            </Form.Text>
             <Form.Control.Feedback type="invalid">
               {!limitedSize ? (
                 <>

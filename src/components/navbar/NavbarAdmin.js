@@ -84,110 +84,110 @@ export default function AdminNavbar(props) {
   });
 
   return (
+    // <Box
+    //   style={{ position: "fixed" }}
+    // position={navbarPosition}
+    // boxShadow={navbarShadow}
+    // // bg={navbarBg}
+    // borderColor={navbarBorder}
+    // filter={navbarFilter}
+    // // backdropFilter={navbarBackdrop}
+    // backgroundPosition="center"
+    // backgroundSize="cover"
+    // borderRadius="16px"
+    // borderWidth="1.5px"
+    // borderStyle="solid"
+    // transitionDelay="0s, 0s, 0s, 0s"
+    // transitionDuration=" 0.25s, 0.25s, 0.25s, 0s"
+    // transition-property="box-shadow, background-color, filter, border"
+    // transitionTimingFunction="linear, linear, linear, linear"
+    // alignItems={{ xl: "center" }}
+    // display={secondary ? "block" : "flex"}
+    // minH="75px"
+    // justifyContent={{ xl: "center" }}
+    // lineHeight="25.6px"
+    // mx="auto"
+    // mt={secondaryMargin}
+    // pb="8px"
+    // right={{ base: "12px", md: "30px", lg: "30px", xl: "30px" }}
+    // px={{
+    //   sm: paddingX,
+    //   md: "10px",
+    // }}
+    // ps={{
+    //   xl: "12px",
+    // }}
+    // pt="8px"
+    // top={{ base: "12px", md: "16px", lg: "20px", xl: "20px" }}
+    // w="calc(100vw - 11vw - 60px)"
+    // >
+    //   <Flex
+    //     w="100%"
+    //     flexDirection={{
+    //       sm: "column",
+    //       md: "row",
+    //     }}
+    //     alignItems={{ xl: "center" }}
+    //     mb={gap}
+    //   >
     <Box
-      position={navbarPosition}
-      boxShadow={navbarShadow}
-      // bg={navbarBg}
-      borderColor={navbarBorder}
-      filter={navbarFilter}
-      // backdropFilter={navbarBackdrop}
-      backgroundPosition="center"
-      backgroundSize="cover"
-      borderRadius="16px"
-      borderWidth="1.5px"
-      borderStyle="solid"
-      transitionDelay="0s, 0s, 0s, 0s"
-      transitionDuration=" 0.25s, 0.25s, 0.25s, 0s"
-      transition-property="box-shadow, background-color, filter, border"
-      transitionTimingFunction="linear, linear, linear, linear"
-      alignItems={{ xl: "center" }}
-      display={secondary ? "block" : "flex"}
-      minH="75px"
-      justifyContent={{ xl: "center" }}
-      lineHeight="25.6px"
-      mx="auto"
-      mt={secondaryMargin}
-      pb="8px"
-      right={{ base: "12px", md: "30px", lg: "30px", xl: "30px" }}
-      px={{
-        sm: paddingX,
-        md: "10px",
+      mb={{ sm: "8px", md: "0px" }}
+      backdropFilter={navbarBackdrop}
+      bg={navbarBg}
+      w="100%"
+      borderRadius="10px"
+      padding="5px 20px"
+      style={{
+        position: "fixed",
+        width: "88.2vw",
+        right: 0,
+        padding: "20px 35px",
       }}
-      ps={{
-        xl: "12px",
-      }}
-      pt="8px"
-      top={{ base: "12px", md: "16px", lg: "20px", xl: "20px" }}
-      w="calc(100vw - 11vw - 60px)"
     >
-      <Flex
-        w="100%"
-        flexDirection={{
-          sm: "column",
-          md: "row",
-        }}
-        alignItems={{ xl: "center" }}
-        mb={gap}
-      >
-        <Box
-          mb={{ sm: "8px", md: "0px" }}
-          backdropFilter={navbarBackdrop}
-          bg={navbarBg}
-          w="100%"
-          borderRadius="10px"
-          padding="5px 20px"
-        >
-          {nameBusiness === "" ? (
-            <Breadcrumb>
-              <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
-                <Link to="/admin/list-business">Pages</Link>
-              </BreadcrumbItem>
-              <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
-                <Link to={`${props.location.pathname}`}>{brandText}</Link>
-              </BreadcrumbItem>
-            </Breadcrumb>
-          ) : (
-            <Breadcrumb>
-              <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
-                <Link to="/admin/list-business">Pages</Link>
-              </BreadcrumbItem>
-              <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
-                <Link to={`/admin/list-product?id=${_getIDBusiness()}`}>
-                  {nameBusiness}
-                </Link>
-              </BreadcrumbItem>
-              <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
-                <Link to={`/admin/list-product?id=${_getIDBusiness()}`}>
-                  {brandText}
-                </Link>
-              </BreadcrumbItem>
-              {detailProducts() !== "" && (
-                <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
-                  <p style={{ cursor: "no-drop" }}>{detailProducts()}</p>
-                </BreadcrumbItem>
-              )}
-            </Breadcrumb>
+      {nameBusiness === "" ? (
+        <Breadcrumb>
+          <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
+            <Link
+              to="/admin/list-business"
+              style={{ fontWeight: "bolder", fontSize: "15px" }}
+            >
+              Pages
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
+            <Link to={`${props.location.pathname}`}>{brandText}</Link>
+          </BreadcrumbItem>
+        </Breadcrumb>
+      ) : (
+        <Breadcrumb>
+          <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
+            <Link to="/admin/list-business" style={{ fontWeight: "bolder", fontSize: "15px" }}>Pages</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
+            <Link to={`/admin/list-product?id=${_getIDBusiness()}`}>
+              {nameBusiness}
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
+            <Link to={`/admin/list-product?id=${_getIDBusiness()}`}>
+              {brandText}
+            </Link>
+          </BreadcrumbItem>
+          {detailProducts() !== "" && (
+            <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
+              <p style={{ cursor: "no-drop" }}>{detailProducts()}</p>
+            </BreadcrumbItem>
           )}
-        </Box>
-        <Box ms="auto" w={{ sm: "100%", md: "unset" }}>
-          <AdminNavbarLinks
-            onOpen={props.onOpen}
-            logoText={props.logoText}
-            secondary={props.secondary}
-            fixed={props.fixed}
-            scrolled={scrolled}
-          />
-        </Box>
-      </Flex>
-      {secondary ? <Text color="white">{message}</Text> : null}
+        </Breadcrumb>
+      )}
     </Box>
   );
 }
 
-AdminNavbar.propTypes = {
-  brandText: PropTypes.string,
-  variant: PropTypes.string,
-  secondary: PropTypes.bool,
-  fixed: PropTypes.bool,
-  onOpen: PropTypes.func,
-};
+// AdminNavbar.propTypes = {
+//   brandText: PropTypes.string,
+//   variant: PropTypes.string,
+//   secondary: PropTypes.bool,
+//   fixed: PropTypes.bool,
+//   onOpen: PropTypes.func,
+// };
