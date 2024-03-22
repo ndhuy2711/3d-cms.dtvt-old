@@ -293,7 +293,7 @@ const ListBusiness = () => {
             id="myInput"
             onKeyUp={fillter}
           />
-          {roleName !== "checkRoleUser" ? (
+          {roleName === "roleManagerAll" ? (
             <Button
               variant="primary"
               style={{ margin: "15px 10px 15px 60px" }}
@@ -496,7 +496,8 @@ const ListBusiness = () => {
                           bg="secondary"
                           style={{ fontSize: "14px", fontWeight: "500" }}
                         >
-                          {item?.attributes?.presets?.data?.length}
+                          {item?.attributes?.presets?.data?.length}+
+                          
                         </Badge>
                       </p>
                     </td>
