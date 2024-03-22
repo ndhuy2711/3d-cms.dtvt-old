@@ -3,6 +3,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Modal, Spinner, Form } from "react-bootstrap";
 import { Textarea } from "@chakra-ui/react";
+import { SkeletonText } from "@chakra-ui/react";
+
 export function ModalUpdateAsset(props) {
   const [dataAsset, setDataAsset] = useState(null);
   const [validated, setValidated] = useState(false);
@@ -32,9 +34,8 @@ export function ModalUpdateAsset(props) {
             {
               data: {
                 name: assetName,
-                digital_twin_factory_machine: machineId || null,
                 description: description,
-                machines: machineId,
+                machines: machineId || {},
               },
             },
             {
@@ -81,10 +82,9 @@ export function ModalUpdateAsset(props) {
               {
                 data: {
                   name: assetName,
-                  digital_twin_factory_machine: machineId || null,
                   description: description,
                   assetUID: uuid,
-                  machines: machineId,
+                  machines: machineId || {},
                   thumbnail: "null",
                 },
               },
@@ -191,9 +191,97 @@ export function ModalUpdateAsset(props) {
         </Modal.Header>
         <Modal.Body>
           {dataAsset === null ? (
-            <div>
-              <Spinner animation="border" />
-            </div>
+            <Form noValidate validated={validated}>
+              <Form.Group
+                controlId="validationProductName"
+                style={{
+                  margin: "5px 10px 5px 0",
+                  float: "left",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Form.Label>Product name</Form.Label>
+
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </Form.Group>
+
+              <Form.Group
+                controlId="validationAssetName"
+                style={{
+                  margin: "5px 10px 5px 0",
+                  float: "left",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Form.Label>Asset name</Form.Label>
+
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </Form.Group>
+
+              <Form.Group
+                controlId="validationMachineId"
+                style={{
+                  margin: "5px 10px 5px 0",
+                  float: "left",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Form.Label>Machine id</Form.Label>
+
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </Form.Group>
+              <Form.Group
+                controlId="validationDescription"
+                style={{
+                  margin: "5px",
+                  clear: "both",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </Form.Group>
+
+              <div>
+                <br />
+                <h3>
+                  <b>3D Model</b>
+                </h3>
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </div>
+            </Form>
           ) : (
             <Form noValidate validated={validated}>
               <Form.Group

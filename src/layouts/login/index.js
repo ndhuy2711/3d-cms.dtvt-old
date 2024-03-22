@@ -20,10 +20,18 @@ const LoginPage = () => {
         password: password,
       })
       .then((response) => {
-        localStorage.setItem("dtvt", response.data.jwt);
-        localStorage.setItem("info", JSON.stringify(response.data.user));
-        setLoading(false);
-        window.location.replace("/");
+        if (response.data.user?.statusTrial === true) {
+          localStorage.setItem("dtvt", response.data.jwt);
+          localStorage.setItem("info", JSON.stringify(response.data.user));
+          setLoading(false);
+          window.location.replace("/");
+        } else {
+          errors.author =
+            "Your account has expired! Please contact with us to active your account.";
+          setErrors(errors);
+          setPassword("");
+          setLoading(false);
+        }
       })
       .catch((error) => {
         const errors = {};
@@ -136,7 +144,11 @@ const LoginPage = () => {
             className="d-flex justify-content-between"
           >
             <div>
-              <Form.Check type="checkbox" label="Remember Me" />
+              <Form.Check
+                type="checkbox"
+                label="Remember Me"
+                defaultChecked={true}
+              />
             </div>
             <div>
               <Link to="#">Forgot Password?</Link>
