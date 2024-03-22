@@ -91,7 +91,7 @@ const LoginPage = () => {
           Log in to your account
         </h2>
         <h5 className="text-center mb-4" style={{ color: "black" }}>
-          Welcome to 3D CMS portal! Please enter your details.
+          Furniture Try-Out Administration
         </h5>
         <Form
           style={{ color: "black", margin: "0 15%" }}
